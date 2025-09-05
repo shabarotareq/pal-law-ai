@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>القاضي الذكي - SmartJudge | نظام التحليل القانوني الذكي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap");
+
+      * {
+        font-family: "Cairo", sans-serif;
+      }
+
+      .gradient-bg {
+        background: linear-gradient(
+          135deg,
+          #1e3a8a 0%,
+          #3b82f6 50%,
+          #06b6d4 100%
+        );
+      }
+
+      .card-hover {
+        transition: all 0.3s ease;
+      }
+
+      .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      }
+
+      .chat-bubble {
+        animation: fadeInUp 0.5s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .stats-counter {
+        animation: countUp 2s ease;
+      }
+
+      @keyframes countUp {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg">
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center space-x-4 space-x-reverse">
+            <div class="bg-white p-2 rounded-lg">
+              <i class="fas fa-balance-scale text-blue-600 text-2xl"></i>
+            </div>
+            <div>
+              <h1 class="text-xl font-bold">القاضي الذكي</h1>
+              <p class="text-sm opacity-90">SmartJudge AI</p>
+            </div>
+          </div>
+
+          <div class="flex items-center space-x-4 space-x-reverse">
+            <div class="relative">
+              <input
+                type="text"
+                placeholder="بحث ذكي في القوانين..."
+                class="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-4 py-2 text-white placeholder-white/70 w-64"
+              />
+              <i class="fas fa-search absolute left-3 top-3 text-white/70"></i>
+            </div>
+            <button
+              class="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-4 py-2 hover:bg-white/30 transition-all"
+            >
+              دخول / تسجيل
+            </button>
+            <select
+              class="bg-white/20 backdrop-blur-sm border border-white/30 rounded-lg px-3 py-2 text-white"
+            >
+              <option value="ar">العربية</option>
+              <option value="en">English</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+      <!-- Hero Section with ChatBot -->
+      <section class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 class="text-3xl font-bold text-gray-800 mb-4">
+              مساعدك القانوني الذكي
+            </h2>
+            <p class="text-gray-600 mb-6">
+              احصل على تحليل قانوني دقيق وأحكام مشابهة باستخدام الذكاء الاصطناعي
+              المتقدم
+            </p>
+            <button
+              onclick="startChat()"
+              class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-all"
+            >
+              <i class="fas fa-robot ml-2"></i>
+              ابدأ المحادثة الآن
+            </button>
+          </div>
+
+          <div class="bg-gray-50 rounded-xl p-6">
+            <div class="flex items-center mb-4">
+              <div class="bg-blue-100 p-2 rounded-full ml-3">
+                <i class="fas fa-robot text-blue-600"></i>
+              </div>
+              <span class="font-semibold">المساعد القانوني الذكي</span>
+            </div>
+
+            <div
+              id="chatContainer"
+              class="space-y-3 mb-4 max-h-64 overflow-y-auto"
+            >
+              <div class="chat-bubble bg-blue-100 p-3 rounded-lg">
+                <p class="text-sm">
+                  مرحباً! كيف يمكنني مساعدتك في استشارتك القانونية اليوم؟
+                </p>
+              </div>
+            </div>
+
+            <div class="flex space-x-2 space-x-reverse">
+              <input
+                type="text"
+                id="chatInput"
+                placeholder="اكتب استفسارك القانوني..."
+                class="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm"
+              />
+              <button
+                onclick="sendMessage()"
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+              >
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Legal Sections -->
+      <section class="mb-8">
+        <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+          أقسام القانون الفلسطيني
+        </h3>
+        <div class="grid md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div
+            class="card-hover bg-white rounded-xl p-6 text-center shadow-md cursor-pointer"
+            onclick="openSection('criminal')"
+          >
+            <div
+              class="bg-red-100 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center"
+            >
+              <i class="fas fa-gavel text-red-600 text-xl"></i>
+            </div>
+            <h4 class="font-semibold text-gray-800 mb-2">القانون الجنائي</h4>
+            <p class="text-xs text-gray-600">الجرائم والعقوبات</p>
+          </div>
+
+          <div
+            class="card-hover bg-white rounded-xl p-6 text-center shadow-md cursor-pointer"
+            onclick="openSection('civil')"
+          >
+            <div
+              class="bg-blue-100 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center"
+            >
+              <i class="fas fa-handshake text-blue-600 text-xl"></i>
+            </div>
+            <h4 class="font-semibold text-gray-800 mb-2">الأحوال المدنية</h4>
+            <p class="text-xs text-gray-600">الحقوق المدنية</p>
+          </div>
+
+          <div
+            class="card-hover bg-white rounded-xl p-6 text-center shadow-md cursor-pointer"
+            onclick="openSection('sharia')"
+          >
+            <div
+              class="bg-green-100 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center"
+            >
+              <i class="fas fa-mosque text-green-600 text-xl"></i>
+            </div>
+            <h4 class="font-semibold text-gray-800 mb-2">القانون الشرعي</h4>
+            <p class="text-xs text-gray-600">الأحوال الشخصية</p>
+          </div>
+
+          <div
+            class="card-hover bg-white rounded-xl p-6 text-center shadow-md cursor-pointer"
+            onclick="openSection('labor')"
+          >
+            <div
+              class="bg-yellow-100 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center"
+            >
+              <i class="fas fa-hard-hat text-yellow-600 text-xl"></i>
+            </div>
+            <h4 class="font-semibold text-gray-800 mb-2">قوانين العمل</h4>
+            <p class="text-xs text-gray-600">حقوق العمال</p>
+          </div>
+
+          <div
+            class="card-hover bg-white rounded-xl p-6 text-center shadow-md cursor-pointer"
+            onclick="openSection('cyber')"
+          >
+            <div
+              class="bg-purple-100 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center"
+            >
+              <i class="fas fa-shield-alt text-purple-600 text-xl"></i>
+            </div>
+            <h4 class="font-semibold text-gray-800 mb-2">
+              الجرائم الإلكترونية
+            </h4>
+            <p class="text-xs text-gray-600">الأمن السيبراني</p>
+          </div>
+
+          <div
+            class="card-hover bg-white rounded-xl p-6 text-center shadow-md cursor-pointer"
+            onclick="openSection('tax')"
+          >
+            <div
+              class="bg-indigo-100 p-4 rounded-full w-16 h-16 mx-auto mb-4 flex items-center justify-center"
+            >
+              <i class="fas fa-calculator text-indigo-600 text-xl"></i>
+            </div>
+            <h4 class="font-semibold text-gray-800 mb-2">الضرائب والمالية</h4>
+            <p class="text-xs text-gray-600">القوانين المالية</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI Tools Section -->
+      <section class="mb-8">
+        <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+          أدوات الذكاء الاصطناعي
+        </h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="card-hover bg-white rounded-xl p-6 shadow-md">
+            <div
+              class="bg-gradient-to-r from-blue-500 to-purple-600 p-3 rounded-lg w-12 h-12 mb-4 flex items-center justify-center"
+            >
+              <i class="fas fa-search text-white"></i>
+            </div>
+            <h4 class="font-semibold text-gray-800 mb-2">البحث الذكي</h4>
+            <p class="text-sm text-gray-600 mb-4">
+              ابحث في آلاف الأحكام والقوانين بالذكاء الاصطناعي
+            </p>
+            <button
+              class="text-blue-600 hover:text-blue-800 text-sm font-medium"
+            >
+              جرب الآن ←
+            </button>
+          </div>
+
+          <div class="card-hover bg-white rounded-xl p-6 shadow-md">
+            <div
+              class="bg-gradient-to-r from-green-500 to-teal-600 p-3 rounded-lg w-12 h-12 mb-4 flex items-center justify-center"
+            >
+              <i class="fas fa-file-alt text-white"></i>
+            </div>
+            <h4 class="font-semibold text-gray-800 mb-2">تحليل الوثائق</h4>
+            <p class="text-sm text-gray-600 mb-4">
+              حلل الوثائق القانونية واستخرج النقاط المهمة
+            </p>
+            <button
+              class="text-green-600 hover:text-green-800 text-sm font-medium"
+            >
+              جرب الآن ←
+            </button>
+          </div>
+
+          <div class="card-hover bg-white rounded-xl p-6 shadow-md">
+            <div
+              class="bg-gradient-to-r from-red-500 to-pink-600 p-3 rounded-lg w-12 h-12 mb-4 flex items-center justify-center"
+            >
+              <i class="fas fa-chart-line text-white"></i>
+            </div>
+            <h4 class="font-semibold text-gray-800 mb-2">تقييم القضية</h4>
+            <p class="text-sm text-gray-600 mb-4">
+              احصل على تقييم احتمالية نجاح القضية
+            </p>
+            <button class="text-red-600 hover:text-red-800 text-sm font-medium">
+              جرب الآن ←
+            </button>
+          </div>
+
+          <div class="card-hover bg-white rounded-xl p-6 shadow-md">
+            <div
+              class="bg-gradient-to-r from-yellow-500 to-orange-600 p-3 rounded-lg w-12 h-12 mb-4 flex items-center justify-center"
+            >
+              <i class="fas fa-pen-fancy text-white"></i>
+            </div>
+            <h4 class="font-semibold text-gray-800 mb-2">كتابة المرافعات</h4>
+            <p class="text-sm text-gray-600 mb-4">
+              مساعد ذكي لكتابة المرافعات القانونية
+            </p>
+            <button
+              class="text-yellow-600 hover:text-yellow-800 text-sm font-medium"
+            >
+              جرب الآن ←
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Statistics Section -->
+      <section class="mb-8">
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+          <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+            إحصائيات النظام
+          </h3>
+          <div class="grid md:grid-cols-4 gap-6">
+            <div class="text-center">
+              <div class="stats-counter text-3xl font-bold text-blue-600 mb-2">
+                15,847
+              </div>
+              <p class="text-gray-600">حكم قضائي</p>
+            </div>
+            <div class="text-center">
+              <div class="stats-counter text-3xl font-bold text-green-600 mb-2">
+                2,341
+              </div>
+              <p class="text-gray-600">مستخدم نشط</p>
+            </div>
+            <div class="text-center">
+              <div
+                class="stats-counter text-3xl font-bold text-purple-600 mb-2"
+              >
+                98.7%
+              </div>
+              <p class="text-gray-600">دقة التحليل</p>
+            </div>
+            <div class="text-center">
+              <div class="stats-counter text-3xl font-bold text-red-600 mb-2">
+                24/7
+              </div>
+              <p class="text-gray-600">خدمة متواصلة</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-4 gap-8">
+          <div>
+            <h4 class="font-bold text-lg mb-4">القاضي الذكي</h4>
+            <p class="text-gray-300 text-sm mb-4">
+              نظام متكامل للتحليل القانوني باستخدام الذكاء الاصطناعي
+            </p>
+            <div class="flex space-x-4 space-x-reverse">
+              <i
+                class="fab fa-facebook text-blue-500 cursor-pointer hover:text-blue-400"
+              ></i>
+              <i
+                class="fab fa-twitter text-blue-400 cursor-pointer hover:text-blue-300"
+              ></i>
+              <i
+                class="fab fa-linkedin text-blue-600 cursor-pointer hover:text-blue-500"
+              ></i>
+            </div>
+          </div>
+
+          <div>
+            <h5 class="font-semibold mb-4">روابط مهمة</h5>
+            <ul class="space-y-2 text-sm text-gray-300">
+              <li><a href="#" class="hover:text-white">اتصل بنا</a></li>
+              <li><a href="#" class="hover:text-white">سياسة الخصوصية</a></li>
+              <li><a href="#" class="hover:text-white">شروط الاستخدام</a></li>
+              <li><a href="#" class="hover:text-white">حقوق الملكية</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 class="font-semibold mb-4">المراجع القانونية</h5>
+            <ul class="space-y-2 text-sm text-gray-300">
+              <li>المحكمة العليا الفلسطينية</li>
+              <li>وزارة العدل الفلسطينية</li>
+              <li>نقابة المحامين الفلسطينيين</li>
+              <li>مجلس القضاء الأعلى</li>
+            </ul>
+          </div>
+
+          <div>
+            <h5 class="font-semibold mb-4">مؤسسات حقوق الإنسان</h5>
+            <ul class="space-y-2 text-sm text-gray-300">
+              <li>الهيئة المستقلة لحقوق الإنسان</li>
+              <li>مركز الميزان لحقوق الإنسان</li>
+              <li>مؤسسة الحق</li>
+              <li>المركز الفلسطيني لحقوق الإنسان</li>
+            </ul>
+          </div>
+        </div>
+
+        <div
+          class="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400"
+        >
+          <p>&copy; 2024 القاضي الذكي - SmartJudge. جميع الحقوق محفوظة.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Chat functionality
+      function startChat() {
+        document.getElementById("chatInput").focus();
+      }
+
+      function sendMessage() {
+        const input = document.getElementById("chatInput");
+        const message = input.value.trim();
+
+        if (message) {
+          const chatContainer = document.getElementById("chatContainer");
+
+          // Add user message
+          const userMessage = document.createElement("div");
+          userMessage.className =
+            "chat-bubble bg-blue-600 text-white p-3 rounded-lg text-right";
+          userMessage.innerHTML = `<p class="text-sm">${message}</p>`;
+          chatContainer.appendChild(userMessage);
+
+          // Simulate AI response
+          setTimeout(() => {
+            const aiMessage = document.createElement("div");
+            aiMessage.className = "chat-bubble bg-gray-100 p-3 rounded-lg";
+            aiMessage.innerHTML = `<p class="text-sm">شكراً لاستفسارك. بناءً على تحليل قاعدة البيانات القانونية، يمكنني مساعدتك في هذا الموضوع. هل تريد تفاصيل أكثر؟</p>`;
+            chatContainer.appendChild(aiMessage);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          }, 1000);
+
+          input.value = "";
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+      }
+
+      // Handle Enter key in chat
+      document
+        .getElementById("chatInput")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
+        });
+
+      // Section navigation
+      function openSection(sectionType) {
+        const sections = {
+          criminal: "القانون الجنائي",
+          civil: "الأحوال المدنية",
+          sharia: "القانون الشرعي",
+          labor: "قوانين العمل",
+          cyber: "الجرائم الإلكترونية",
+          tax: "الضرائب والمالية",
+        };
+
+        alert(`سيتم توجيهك إلى قسم ${sections[sectionType]} قريباً`);
+      }
+
+      // Animate counters on scroll
+      function animateCounters() {
+        const counters = document.querySelectorAll(".stats-counter");
+        counters.forEach((counter) => {
+          const target = parseInt(counter.textContent.replace(/,/g, ""));
+          const increment = target / 100;
+          let current = 0;
+
+          const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+              counter.textContent = target.toLocaleString();
+              clearInterval(timer);
+            } else {
+              counter.textContent = Math.floor(current).toLocaleString();
+            }
+          }, 20);
+        });
+      }
+
+      // Initialize animations when page loads
+      window.addEventListener("load", () => {
+        setTimeout(animateCounters, 500);
+      });
+    </script>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+              "window.__CF$cv$params={r:'973101770506997d',t:'MTc1NTg1MTQwMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener)
+            document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState &&
+                ((document.onreadystatechange = e), c());
+            };
+          }
+        }
+      })();
+    </script>
+  </body>
+</html>
