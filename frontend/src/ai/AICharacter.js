@@ -33,3 +33,4 @@ export class AICharacter {
     this.mesh.position.z += (Math.random() - 0.5) * 0.01;
   }
 }
+
