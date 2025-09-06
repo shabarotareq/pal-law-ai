@@ -1,0 +1,76 @@
+pal-law-ai/
+├── frontend/
+│   ├── public/
+│   │   └── index.html
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── auth/
+│   │   │   │   ├── Login.jsx
+│   │   │   │   ├── Register.jsx
+│   │   │   │   ├── ForgotPassword.jsx
+│   │   │   │   └── AuthLayout.jsx
+│   │   │   ├── dashboard/
+│   │   │   │   ├── Dashboard.jsx
+│   │   │   │   ├── Sidebar.jsx
+│   │   │   │   ├── Header.jsx
+│   │   │   │   ├── UserManagement.jsx
+│   │   │   │   ├── Settings.jsx
+│   │   │   │   ├── Analytics.jsx
+│   │   │   │   ├── Profile.jsx
+│   │   │   │   └── VirtualCourt.jsx
+│   │   │   ├── landing/
+│   │   │   │   ├── LandingPage.jsx
+│   │   │   │   ├── HeroSection.jsx
+│   │   │   │   ├── Features.jsx
+│   │   │   │   └── Footer.jsx
+│   │   │   └── common/
+│   │   │       ├── Layout.jsx
+│   │   │       ├── Modal.jsx
+│   │   │       └── Loading.jsx
+│   │   ├── contexts/
+│   │   │   ├── AuthContext.jsx
+│   │   │   └── ThemeContext.jsx
+│   │   ├── hooks/
+│   │   │   ├── useAuth.js
+│   │   │   └── useTheme.js
+│   │   ├── services/
+│   │   │   ├── api.js
+│   │   │   ├── auth.js
+│   │   │   └── users.js
+│   │   ├── styles/
+│   │   │   ├── App.css
+│   │   │   ├── Dashboard.css
+│   │   │   ├── Auth.css
+│   │   │   └── Landing.css
+│   │   ├── utils/
+│   │   │   ├── constants.js
+│   │   │   └── helpers.js
+│   │   ├── App.js
+│   │   ├── AppRoutes.js
+│   │   └── index.js
+│   └── package.json
+├── backend/
+│   ├── models/
+│   │   ├── User.py
+│   │   ├── Role.py
+│   │   ├── Permission.py
+│   │   └── __init__.py
+│   ├── routes/
+│   │   ├── auth.py
+│   │   ├── users.py
+│   │   ├── settings.py
+│   │   └── __init__.py
+│   ├── utils/
+│   │   ├── auth_utils.py
+│   │   ├── validators.py
+│   │   └── __init__.py
+│   ├── config.py
+│   ├── app.py
+│   └── requirements.txt
+├── database/
+│   ├── schema.sql
+│   ├── seed_data.sql
+│   └── migrations/
+├── docs/
+│   └── API.md
+└── README.md
