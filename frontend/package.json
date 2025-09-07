@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+   "jspdf": "^2.5.1",
     "-": "^0.0.1",
     "@craco/craco": "^7.1.0",
     "@radix-ui/react-slot": "^1.2.3",
