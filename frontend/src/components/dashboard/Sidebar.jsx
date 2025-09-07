@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import VirtualCourtOverlay from "../virtual_court/VirtualCourt"; // استيراد المودال
+import VirtualCourtOverlay from "./VirtualCourt"; // استيراد المودال
 
 const Sidebar = ({ lang = "ar", isOpen = true, onClose }) => {
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
@@ -135,3 +135,4 @@ const Sidebar = ({ lang = "ar", isOpen = true, onClose }) => {
 };
 
 export default Sidebar;
+
