@@ -93,7 +93,7 @@ const JudicialMarquee = ({ lang = "ar" }) => {
           display: inline-flex;
           animation: ${
             lang === "ar" ? "marquee-ar" : "marquee-en"
-          } 265s linear infinite;
+          } 260s linear infinite;
         }
       `}</style>
     </div>
@@ -101,3 +101,4 @@ const JudicialMarquee = ({ lang = "ar" }) => {
 };
 
 export default JudicialMarquee;
+
