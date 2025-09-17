@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../../assets/logo192.jpg";
-import Constitution from "../constitution/Constitution1";
+import Constitution from "../constitution/Constitution";
 
 const Navbar = ({ lang, toggleLanguage }) => {
   const [me, setMe] = useState(null);
@@ -250,3 +250,4 @@ const Navbar = ({ lang, toggleLanguage }) => {
 };
 
 export default Navbar;
+
