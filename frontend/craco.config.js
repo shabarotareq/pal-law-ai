@@ -1,4 +1,5 @@
 const { when, whenDev } = require('@craco/craco');
+const webpack = require('webpack'); // أضف هذا السطر
 
 module.exports = {
   webpack: {
@@ -37,7 +38,9 @@ module.exports = {
       webpackConfig.ignoreWarnings = [
         /Failed to parse source map/,
         /Module not found: Error: Can't resolve/,
-        /Critical dependency: require function is used/
+        /Critical dependency: require function is used/,
+        /Can't resolve 'fs'/,
+        /Can't resolve 'path'/
       ];
 
       return webpackConfig;
