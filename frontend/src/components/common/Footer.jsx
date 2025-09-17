@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link"; // ✅ استيراد Link الخاص بـ Next.js
 import Logo from "../../assets/logo192.jpg"; // ✅ استيراد اللوجو من assets
 
 const Footer = ({ lang }) => {
@@ -110,23 +110,31 @@ const Footer = ({ lang }) => {
             </h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                <Link to="/" className="hover:underline">
-                  {lang === "ar" ? "الرئيسية" : "Home"}
+                <Link href="/">
+                  <a className="hover:underline">
+                    {lang === "ar" ? "الرئيسية" : "Home"}
+                  </a>
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="hover:underline">
-                  {lang === "ar" ? "من نحن" : "About"}
+                <Link href="/about">
+                  <a className="hover:underline">
+                    {lang === "ar" ? "من نحن" : "About"}
+                  </a>
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="hover:underline">
-                  {lang === "ar" ? "تواصل معنا" : "Contact"}
+                <Link href="/contact">
+                  <a className="hover:underline">
+                    {lang === "ar" ? "تواصل معنا" : "Contact"}
+                  </a>
                 </Link>
               </li>
               <li>
-                <Link to="/privacy" className="hover:underline">
-                  {lang === "ar" ? "سياسة الخصوصية" : "Privacy Policy"}
+                <Link href="/privacy">
+                  <a className="hover:underline">
+                    {lang === "ar" ? "سياسة الخصوصية" : "Privacy Policy"}
+                  </a>
                 </Link>
               </li>
             </ul>
