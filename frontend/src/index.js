@@ -1,6 +1,6 @@
 // pages/index.js
-import Sidebar from "../components/common/Sidebar";
-import Footer from "../components/common/Footer";
+import Sidebar from "./components/common/Sidebar";
+import Footer from "./components/common/Footer";
 
 export default function HomePage({ lang, setLang }) {
   return (
@@ -30,3 +30,4 @@ export default function HomePage({ lang, setLang }) {
     </div>
   );
 }
+
