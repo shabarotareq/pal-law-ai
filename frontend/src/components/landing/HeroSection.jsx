@@ -14,6 +14,7 @@ const HeroSection = ({ lang = "ar" }) => {
   const messagesEndRef = useRef(null);
   const recognitionRef = useRef(null);
 
+  // استرجاع الرسائل المخزنة وإعداد التعرف على الصوت
   useEffect(() => {
     const savedMessages = sessionStorage.getItem("chatMessages");
     if (savedMessages) setMessages(JSON.parse(savedMessages));
@@ -37,23 +38,15 @@ const HeroSection = ({ lang = "ar" }) => {
       recognition.lang = speechLang;
       recognition.continuous = false;
       recognition.interimResults = false;
-
-      recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        setInput(transcript);
-      };
-
-      recognition.onend = () => {
-        setIsRecording(false);
-      };
-
+      recognition.onresult = (event) =>
+        setInput(event.results[0][0].transcript);
+      recognition.onend = () => setIsRecording(false);
       recognitionRef.current = recognition;
     }
   };
 
   const handleSend = async () => {
     if (!input.trim()) return;
-
     const userMessage = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
@@ -86,12 +79,9 @@ const HeroSection = ({ lang = "ar" }) => {
       );
 
       const aiText = response.data.choices[0].message.content;
-      const aiMessage = { sender: "ai", text: aiText };
-      setMessages((prev) => [...prev, aiMessage]);
-
+      setMessages((prev) => [...prev, { sender: "ai", text: aiText }]);
       speak(aiText);
     } catch (error) {
-      console.error("AI API Error:", error);
       const fallbackMessage = {
         sender: "ai",
         text: "عذرًا، لم أتمكن من معالجة طلبك الآن.",
@@ -111,7 +101,6 @@ const HeroSection = ({ lang = "ar" }) => {
     const doc = new jsPDF({ orientation: "portrait" });
     doc.setFont("helvetica", "normal");
     doc.setFontSize(12);
-
     messages.forEach((msg, idx) => {
       const prefix =
         msg.sender === "user"
@@ -123,22 +112,16 @@ const HeroSection = ({ lang = "ar" }) => {
           : "Assistant: ";
       doc.text(`${prefix}${msg.text}`, 10, 10 + idx * 10);
     });
-
     doc.save("chat_history.pdf");
   };
 
   const toggleRecording = () => {
-    if (recognitionRef.current) {
-      if (isRecording) {
-        recognitionRef.current.stop();
-        setIsRecording(false);
-      } else {
-        recognitionRef.current.start();
-        setIsRecording(true);
-      }
-    } else {
-      alert("التعرف على الصوت غير مدعوم في هذا المتصفح.");
-    }
+    if (!recognitionRef.current)
+      return alert("التعرف على الصوت غير مدعوم في هذا المتصفح.");
+    isRecording
+      ? recognitionRef.current.stop()
+      : recognitionRef.current.start();
+    setIsRecording(!isRecording);
   };
 
   const speak = (text) => {
@@ -149,54 +132,66 @@ const HeroSection = ({ lang = "ar" }) => {
     }
   };
 
-  const toggleSpeechLang = () => {
+  const toggleSpeechLang = () =>
     setSpeechLang((prev) => (prev === "ar-SA" ? "en-US" : "ar-SA"));
-  };
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-900 via-blue-700 to-blue-500 text-white py-20 px-6">
-      <div className="text-center max-w-4xl">
-        <h1 className="text-4xl md:text-6xl font-bold mb-6">
+    <section
+      id="hero-section"
+      className="flex flex-col flex-1 items-center justify-center text-white py-10 px-6 relative overflow-hidden h-full"
+      style={{
+        backgroundImage: "url('/assets/court.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+      {/* طبقة شفافة */}
+      <div className="absolute inset-0 bg-black bg-opacity-50 rounded-2xl"></div>
+
+      {/* المحتوى */}
+      <div className="text-center max-w-4xl z-10 relative">
+        <h1 className="text-3xl md:text-5xl font-bold mb-4">
           {lang === "ar" ? (
             <>
               منصة <span className="text-yellow-300">عدالة AI</span>
             </>
           ) : (
-            <>Adala AI Platform</>
+            "Adala AI Platform"
           )}
         </h1>
 
-        <p className="text-lg md:text-2xl mb-8 max-w-2xl mx-auto">
+        <p className="text-base md:text-xl mb-6 max-w-2xl mx-auto">
           {lang === "ar"
             ? "أول منصة عربية تعتمد على الذكاء الاصطناعي والواقع الافتراضي لتقديم الاستشارات القانونية."
             : "The first Arabic platform leveraging AI and VR to provide legal consultations."}
         </p>
 
-        {/* زر الاستشارة الذكية فوق الإحصاءات */}
+        {/* زر الاستشارة الذكية */}
         <button
           onClick={() => setChatVisible(!chatVisible)}
-          className="mb-10 bg-yellow-400 text-black px-6 py-3 rounded-lg font-semibold hover:bg-yellow-300 transition"
+          className="mb-6 bg-yellow-400 text-black px-5 py-2 rounded-lg font-semibold hover:bg-yellow-300 transition z-20 relative text-sm"
         >
           {lang === "ar" ? "ابدأ الاستشارة الذكية" : "Start Smart Consultation"}
         </button>
 
         {/* الإحصاءات */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-          <div className="p-4">
-            <div className="text-3xl font-bold text-yellow-300 mb-2">1000+</div>
-            <p className="text-sm">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center z-10 relative">
+          <div className="p-3 bg-blue-900 bg-opacity-70 rounded-lg backdrop-blur-sm">
+            <div className="text-2xl font-bold text-yellow-300 mb-1">1000+</div>
+            <p className="text-xs">
               {lang === "ar" ? "قضية معالجة" : "Cases Processed"}
             </p>
           </div>
-          <div className="p-4">
-            <div className="text-3xl font-bold text-yellow-300 mb-2">99%</div>
-            <p className="text-sm">
+          <div className="p-3 bg-blue-900 bg-opacity-70 rounded-lg backdrop-blur-sm">
+            <div className="text-2xl font-bold text-yellow-300 mb-1">99%</div>
+            <p className="text-xs">
               {lang === "ar" ? "دقة في التحليل" : "Analysis Accuracy"}
             </p>
           </div>
-          <div className="p-4">
-            <div className="text-3xl font-bold text-yellow-300 mb-2">24/7</div>
-            <p className="text-sm">
+          <div className="p-3 bg-blue-900 bg-opacity-70 rounded-lg backdrop-blur-sm">
+            <div className="text-2xl font-bold text-yellow-300 mb-1">24/7</div>
+            <p className="text-xs">
               {lang === "ar" ? "دعم متواصل" : "Continuous Support"}
             </p>
           </div>
