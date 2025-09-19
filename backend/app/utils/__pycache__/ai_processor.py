@@ -79,3 +79,4 @@ class AIProcessor:
         """
         results = self.search_in_database(query)
         return [doc.to_dict() for doc in results]
+
