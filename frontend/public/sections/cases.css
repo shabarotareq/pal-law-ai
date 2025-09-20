@@ -1,0 +1,123 @@
+/* 🌟 إعدادات عامة للصفحات الفرعية للقوانين */
+body {
+  font-family: "Tajawal", sans-serif;
+  background: linear-gradient(135deg, #f9fafb, #eef2ff);
+  margin: 0;
+  padding: 0;
+  color: #1f2937;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 🌟 رأس الصفحة */
+header {
+  background: linear-gradient(90deg, #2563eb, #4f46e5);
+  color: white;
+  text-align: center;
+  padding: 2rem 1rem;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  animation: fadeInDown 1s ease-out;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+header p {
+  margin-top: 0.5rem;
+  opacity: 0.9;
+}
+
+/* 🌟 حاوية المحتوى */
+.container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  animation: fadeInUp 1s ease-out;
+}
+
+/* 🌟 العناوين */
+h2 {
+  font-size: 1.5rem;
+  color: #2563eb;
+  margin-bottom: 1rem;
+  border-right: 5px solid #2563eb;
+  padding-right: 0.5rem;
+}
+
+/* 🌟 القوائم */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+ul li {
+  background: #f3f4f6;
+  margin-bottom: 0.8rem;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+ul li:hover {
+  background: #e0e7ff;
+  transform: translateX(-5px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+ul li i {
+  color: #4f46e5;
+  font-size: 1.1rem;
+}
+
+/* 🌟 زر العودة للرئيسية */
+.back-btn {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background: #4f46e5;
+  color: white;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.back-btn:hover {
+  background: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  transform: scale(1.05);
+}
+
+/* 🌟 أنيميشن */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
