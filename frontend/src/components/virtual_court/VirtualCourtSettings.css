@@ -1,0 +1,208 @@
+.virtual-court-settings {
+  width: 300px;
+  background-color: #1f2937; /* داكن للوحة الجانبية */
+  color: #f9fafb;
+  padding: 16px;
+  border-radius: 8px;
+  font-family: "Cairo", sans-serif;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.panel-section {
+  margin-bottom: 24px;
+}
+
+.panel-section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #374151;
+  padding-bottom: 6px;
+}
+
+.role-selection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.role-btn {
+  flex: 1 1 48%;
+  padding: 8px;
+  background-color: #374151;
+  border: none;
+  border-radius: 6px;
+  color: #f9fafb;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-align: center;
+}
+
+.role-btn.active {
+  background-color: #10b981; /* أخضر نشط */
+}
+
+.role-btn:hover {
+  background-color: #4b5563;
+}
+
+.add-players h4 {
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.add-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.add-btn {
+  flex: 1 1 48%;
+  padding: 6px;
+  border: none;
+  border-radius: 6px;
+  color: #f9fafb;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.1s, background-color 0.2s;
+}
+
+.add-btn.judge {
+  background-color: #f59e0b;
+}
+.add-btn.lawyer {
+  background-color: #3b82f6;
+}
+.add-btn.witness {
+  background-color: #10b981;
+}
+.add-btn.defendant {
+  background-color: #ef4444;
+}
+
+.add-btn:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.players-list h4 {
+  margin-bottom: 8px;
+  font-size: 1rem;
+}
+
+.player-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  background-color: #374151;
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+.player-name {
+  font-weight: 500;
+}
+
+.player-role {
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: capitalize;
+}
+
+.player-role.judge {
+  background-color: #f59e0b;
+}
+.player-role.lawyer {
+  background-color: #3b82f6;
+}
+.player-role.witness {
+  background-color: #10b981;
+}
+.player-role.defendant {
+  background-color: #ef4444;
+}
+
+.player-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.remove-btn {
+  background-color: #ef4444;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: #f9fafb;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.remove-btn:hover {
+  background-color: #b91c1c;
+}
+
+.session-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tool-btn {
+  flex: 1 1 48%;
+  padding: 6px;
+  background-color: #4b5563;
+  border: none;
+  border-radius: 6px;
+  color: #f9fafb;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.tool-btn:hover {
+  background-color: #6b7280;
+  transform: scale(1.05);
+}
+
+.notification {
+  padding: 8px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-weight: bold;
+  text-align: center;
+  animation: fadeInOut 3s forwards;
+}
+
+.notification.success {
+  background-color: #10b981;
+  color: #f9fafb;
+}
+.notification.warning {
+  background-color: #f59e0b;
+  color: #1f2937;
+}
+.notification.info {
+  background-color: #3b82f6;
+  color: #f9fafb;
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
