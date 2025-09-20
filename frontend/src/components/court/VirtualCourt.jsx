@@ -96,7 +96,14 @@ function TexturedFloor() {
 
 // ======================== قائمة الشخصيات ========================
 function CharacterSelector({ selected, onSelect }) {
-  const characters = ["القاضي", "المحامي", "المتهم", "الشاهد", "الجمهور"];
+  const characters = [
+    "القاضي",
+    "المدعي",
+    "المحامي",
+    "المتهم",
+    "الشاهد",
+    "الجمهور",
+  ];
   return (
     <div className="flex flex-wrap gap-2 mt-4 justify-center">
       {characters.map((c) => (
@@ -155,10 +162,11 @@ function MainMenu({ onDiscover, onSettings, onExit }) {
 }
 
 // ======================== نافذة الخوادم ========================
-function ServersOverlay({ onClose }) {
+function ServersOverlay({ onClose, activeServer }) {
   const [activeTab, setActiveTab] = useState(0);
   const [colleagues, setColleagues] = useState(["أحمد", "سارة"]);
   const [newColleague, setNewColleague] = useState("");
+
   const servers = [
     {
       server: "خادم 1",
@@ -178,10 +186,6 @@ function ServersOverlay({ onClose }) {
 
   const getDelayColor = (delay) =>
     delay === 0 ? "bg-green-600" : delay <= 2 ? "bg-yellow-500" : "bg-red-600";
-
-  const handleButtonAction = (btn) => {
-    alert(`⚡ تم الضغط على: ${btn}`);
-  };
 
   const tabs = [
     {
@@ -234,8 +238,18 @@ function ServersOverlay({ onClose }) {
     },
     {
       title: "المعاينة",
-      content: <div className="text-center text-white py-6">🔍 المعاينة</div>,
-      buttons: ["تغيير التصفيات", "تحديث الكل", "اتصال"],
+      content: activeServer ? (
+        <div className="text-white space-y-2">
+          <p>⚖️ المحكمة: {activeServer.court}</p>
+          <p>📑 القضية: {activeServer.caseNumber}</p>
+          <p>🔢 الجلسة: {activeServer.sessionNumber}</p>
+          <p>📅 التاريخ: {activeServer.date}</p>
+          <p>👥 المشاركون: {activeServer.participants.join(", ")}</p>
+        </div>
+      ) : (
+        <div className="text-center text-white py-6">🔍 لا يوجد سيرفر نشط</div>
+      ),
+      buttons: ["تحديث", "اتصال"],
     },
     {
       title: "شبكة محلية",
@@ -320,7 +334,7 @@ function ServersOverlay({ onClose }) {
           {tabs[activeTab].buttons.map((btn, i) => (
             <button
               key={i}
-              onClick={() => handleButtonAction(btn)}
+              onClick={() => alert(`⚡ ${btn}`)}
               className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 transition text-white shadow"
             >
               {btn}
@@ -339,332 +353,252 @@ function ServersOverlay({ onClose }) {
     </div>
   );
 }
-
 // ======================== إعدادات المحكمة ========================
-function CourtSettings({ onBack, onEnter, caseFile, setCaseFile }) {
-  const savePDF = () => {
-    const doc = new jsPDF();
-    doc.text(`المحكمة: ${caseFile.court} ${caseFile.subCourt || ""}`, 10, 10);
-    doc.text(`المدينة: ${caseFile.city}`, 10, 20);
-    doc.text(`القضية: ${caseFile.caseNumber}`, 10, 30);
-    doc.text(`الجلسة: ${caseFile.sessionNumber}`, 10, 40);
-    doc.text(`التاريخ: ${caseFile.date}`, 10, 50);
-    doc.text(`الوقت: ${caseFile.time}`, 10, 60);
-    doc.text(`الشخصية: ${caseFile.character}`, 10, 70);
-    doc.save(`Case_${caseFile.caseNumber}.pdf`);
+function CourtSettings({ onStart }) {
+  const [court, setCourt] = useState("محكمة الصلح");
+  const [subCourt, setSubCourt] = useState("");
+  const [city, setCity] = useState("القدس");
+  const [caseNumber, setCaseNumber] = useState("");
+  const [sessionNumber, setSessionNumber] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [role, setRole] = useState("القاضي");
+
+  const handleStart = () => {
+    if (!caseNumber || !sessionNumber || !date || !time) {
+      alert("⚠️ يرجى إدخال جميع البيانات المطلوبة");
+      return;
+    }
+    onStart({
+      court,
+      subCourt,
+      city,
+      caseNumber,
+      sessionNumber,
+      date,
+      time,
+      role,
+    });
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-indigo-900 to-purple-800 text-white p-6">
+    <div className="flex flex-col items-center justify-center w-screen h-screen text-white bg-gradient-to-br from-gray-900 via-gray-800 to-black p-4">
       <h2 className="text-3xl font-bold mb-6">⚖️ إعدادات المحكمة</h2>
-      <div className="grid gap-3 w-full max-w-md">
+      <div className="grid grid-cols-2 gap-4 w-full max-w-2xl">
         <select
-          className="p-2 text-black rounded"
-          value={caseFile.court}
-          onChange={(e) => setCaseFile({ ...caseFile, court: e.target.value })}
+          value={court}
+          onChange={(e) => setCourt(e.target.value)}
+          className="p-2 rounded text-black"
         >
-          <option value="">اختر نوع المحكمة</option>
-          <option value="الصلح">محكمة الصلح</option>
-          <option value="الشرعية">المحكمة الشرعية</option>
-          <option value="العليا">المحكمة العليا</option>
+          <option>محكمة الصلح</option>
+          <option>المحكمة الشرعية</option>
+          <option>المحكمة العليا</option>
         </select>
-        {caseFile.court === "الصلح" && (
+        {court === "محكمة الصلح" && (
           <select
-            className="p-2 text-black rounded"
-            value={caseFile.subCourt}
-            onChange={(e) =>
-              setCaseFile({ ...caseFile, subCourt: e.target.value })
-            }
+            value={subCourt}
+            onChange={(e) => setSubCourt(e.target.value)}
+            className="p-2 rounded text-black"
           >
-            <option value="">اختر فرع المحكمة</option>
-            <option value="البداية">محكمة البداية</option>
-            <option value="الاستئناف">محكمة الاستئناف</option>
-            <option value="النقض">محكمة النقض</option>
+            <option>محكمة البداية</option>
+            <option>محكمة الاستئناف</option>
+            <option>محكمة النقض</option>
           </select>
         )}
         <input
-          className="p-2 text-black rounded"
           type="text"
-          placeholder="🏙️ المدينة"
-          value={caseFile.city}
-          onChange={(e) => setCaseFile({ ...caseFile, city: e.target.value })}
+          placeholder="📍 المدينة"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          className="p-2 rounded text-black"
         />
         <input
-          className="p-2 text-black rounded"
           type="text"
           placeholder="📑 رقم القضية"
-          value={caseFile.caseNumber}
-          onChange={(e) =>
-            setCaseFile({ ...caseFile, caseNumber: e.target.value })
-          }
+          value={caseNumber}
+          onChange={(e) => setCaseNumber(e.target.value)}
+          className="p-2 rounded text-black"
         />
         <input
-          className="p-2 text-black rounded"
           type="text"
           placeholder="🔢 رقم الجلسة"
-          value={caseFile.sessionNumber}
-          onChange={(e) =>
-            setCaseFile({ ...caseFile, sessionNumber: e.target.value })
-          }
+          value={sessionNumber}
+          onChange={(e) => setSessionNumber(e.target.value)}
+          className="p-2 rounded text-black"
         />
         <input
-          className="p-2 text-black rounded"
           type="date"
-          value={caseFile.date}
-          onChange={(e) => setCaseFile({ ...caseFile, date: e.target.value })}
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          className="p-2 rounded text-black"
         />
         <input
-          className="p-2 text-black rounded"
           type="time"
-          value={caseFile.time}
-          onChange={(e) => setCaseFile({ ...caseFile, time: e.target.value })}
+          value={time}
+          onChange={(e) => setTime(e.target.value)}
+          className="p-2 rounded text-black"
         />
+        <CharacterSelector selected={role} onSelect={setRole} />
       </div>
-      <CharacterSelector
-        selected={caseFile.character}
-        onSelect={(c) => setCaseFile({ ...caseFile, character: c })}
-      />
-      <div className="flex gap-4 mt-6">
-        <button
-          className="bg-green-600 px-5 py-2 rounded-xl shadow hover:bg-green-700"
-          onClick={() =>
-            caseFile.character === "القاضي" || caseFile.sessionNumber
-              ? onEnter()
-              : alert("❌ يجب أن تكون القاضي أو الجلسة منعقدة")
-          }
-        >
-          🚪 دخول الجلسة
-        </button>
-        <button
-          className="bg-yellow-500 px-5 py-2 rounded-xl shadow hover:bg-yellow-600 text-black font-bold"
-          onClick={savePDF}
-        >
-          💾 حفظ الملف
-        </button>
-        <button
-          className="bg-gray-600 px-5 py-2 rounded-xl shadow hover:bg-gray-700"
-          onClick={onBack}
-        >
-          ↩️ العودة
-        </button>
-      </div>
+      <button
+        onClick={handleStart}
+        className="mt-6 px-6 py-3 bg-green-600 rounded-xl hover:bg-green-700 transition shadow-lg"
+      >
+        🚪 دخول الجلسة
+      </button>
     </div>
   );
 }
 
-// ======================== المحكمة ثلاثية الأبعاد مع التحدث ========================
-function Court3D({ caseFile, colleagues = [] }) {
-  const [speechData, setSpeechData] = useState({});
-  const [inputText, setInputText] = useState("");
-  const [canSpeak, setCanSpeak] = useState({
-    القاضي: true,
-    المدعي: false,
-    المحامي: false,
-    المتهم: false,
-    الشاهد: false,
-    الجمهور: false,
-  });
+// ======================== مشهد المحكمة ========================
+function Court3D({ courtData, onExit }) {
+  const [messages, setMessages] = useState([]);
+  const [currentSpeech, setCurrentSpeech] = useState({});
+  const [input, setInput] = useState("");
 
-  const cameraTarget = [-16, 1.2, -2];
-
-  const handleSpeak = (role) => {
-    if (!inputText) return;
-    if (!canSpeak[role]) {
-      alert("❌ ليس لديك صلاحية التحدث حالياً.");
-      return;
-    }
-    setSpeechData((prev) => ({ ...prev, [role]: inputText }));
-    const doc = new jsPDF();
-    doc.text(`${role}: ${inputText}`, 10, 10);
-    doc.save(`Case_${caseFile.caseNumber}_speech.pdf`);
-    setInputText("");
+  const addMessage = (sender, text) => {
+    const msg = { sender, text, time: new Date().toLocaleTimeString() };
+    setMessages((prev) => [...prev, msg]);
+    setCurrentSpeech({ ...currentSpeech, [sender]: text });
   };
 
-  const toggleRoleSpeaking = (role) => {
-    setCanSpeak((prev) => ({ ...prev, [role]: !prev[role] }));
+  const handleSend = () => {
+    if (!input.trim()) return;
+    addMessage(courtData.role, input);
+    setInput("");
   };
-
-  const [showInstructions, setShowInstructions] = useState(false);
-  useEffect(() => {
-    const listener = (e) => {
-      if (e.key === "F1") {
-        e.preventDefault();
-        setShowInstructions((prev) => !prev);
-      }
-    };
-    window.addEventListener("keydown", listener);
-    return () => window.removeEventListener("keydown", listener);
-  }, []);
 
   return (
-    <div className="w-screen h-screen relative bg-black text-white flex">
-      {/* اللوحة الجانبية */}
-      <div className="absolute top-0 right-0 w-80 h-full bg-gray-900/90 p-4 text-sm overflow-y-auto z-10">
-        <p>
-          ⚖️ المحكمة: {caseFile.court} {caseFile.subCourt || ""}
-        </p>
-        <p>🏙️ المدينة: {caseFile.city}</p>
-        <p>📑 القضية: {caseFile.caseNumber}</p>
-        <p>🔢 الجلسة: {caseFile.sessionNumber}</p>
-        <p>
-          📅 {caseFile.date} ⏰ {caseFile.time}
-        </p>
-        <p>👤 الشخصية: {caseFile.character}</p>
-
-        {/* صلاحيات القاضي */}
-        {caseFile.character === "القاضي" && (
-          <div className="mt-4 space-y-2">
-            <p className="font-bold">إدارة صلاحيات التحدث:</p>
-            {Object.keys(canSpeak).map(
-              (role) =>
-                role !== "القاضي" && (
-                  <div
-                    key={role}
-                    className="flex justify-between items-center mb-1"
-                  >
-                    <span>{role}</span>
-                    <button
-                      onClick={() => toggleRoleSpeaking(role)}
-                      className={`px-2 py-1 rounded text-white ${
-                        canSpeak[role]
-                          ? "bg-green-600 hover:bg-green-700"
-                          : "bg-red-600 hover:bg-red-700"
-                      }`}
-                    >
-                      {canSpeak[role] ? "مسموح" : "ممنوع"}
-                    </button>
-                  </div>
-                )
-            )}
-          </div>
-        )}
-
-        {/* صندوق التحدث */}
-        <div className="mt-4 space-y-2">
-          <input
-            type="text"
-            value={inputText}
-            onChange={(e) => setInputText(e.target.value)}
-            placeholder="اكتب ما تريد قوله..."
-            className="w-full p-2 rounded text-black"
-          />
+    <div className="flex w-screen h-screen bg-gray-950">
+      {/* === القائمة الجانبية === */}
+      <div className="w-72 bg-gray-900 text-white p-4 flex flex-col">
+        <h3 className="text-xl font-bold mb-4">📑 تفاصيل الجلسة</h3>
+        <p>⚖️ المحكمة: {courtData.court}</p>
+        {courtData.subCourt && <p>🏛️ الفرع: {courtData.subCourt}</p>}
+        <p>📍 المدينة: {courtData.city}</p>
+        <p>📑 رقم القضية: {courtData.caseNumber}</p>
+        <p>🔢 رقم الجلسة: {courtData.sessionNumber}</p>
+        <p>📅 التاريخ: {courtData.date}</p>
+        <p>🕘 الوقت: {courtData.time}</p>
+        <p>👤 الدور: {courtData.role}</p>
+        <div className="mt-6 flex flex-col gap-2">
+          <button className="px-3 py-2 bg-blue-600 rounded hover:bg-blue-700">
+            ✋ رفع اليد
+          </button>
+          <button className="px-3 py-2 bg-green-600 rounded hover:bg-green-700">
+            🎤 الميكروفون
+          </button>
           <button
-            onClick={() => handleSpeak(caseFile.character)}
-            className="w-full bg-green-600 hover:bg-green-700 p-2 rounded text-white font-bold"
+            onClick={onExit}
+            className="px-3 py-2 bg-red-600 rounded hover:bg-red-700"
           >
-            🗣️ تحدث
+            ⬅️ العودة
           </button>
         </div>
-
-        {/* تعليمات F1 */}
-        {showInstructions && (
-          <div className="mt-4 p-2 bg-gray-700 rounded text-xs space-y-1">
-            <p>ℹ️ تعليمات التحدث والقواعد:</p>
-            <ul className="list-disc list-inside text-white">
-              <li>القاضي: يمكنه التحدث ومنح الصلاحيات.</li>
-              <li>المدعي/المحامي: التحدث فقط بإذن القاضي.</li>
-              <li>المتهم: يجيب على الاستفسارات فقط.</li>
-              <li>الشهود: يجيب على الاستجوابات.</li>
-              <li>الجمهور: ممنوع الكلام إلا بإذن القاضي.</li>
-              <li>المحادثات تظهر لمدة 30 ثانية فوق المتحدث.</li>
-              <li>يتم حفظ كل حديث تلقائياً في ملف القضية.</li>
-            </ul>
-          </div>
-        )}
       </div>
 
-      {/* مشهد المحكمة */}
-      <div className="flex-1">
-        <Canvas shadows camera={{ position: [-25, 5, 5], fov: 45 }}>
-          <ambientLight intensity={0.5} />
-          <directionalLight position={[5, 15, 5]} intensity={1} castShadow />
+      {/* === مشهد المحكمة === */}
+      <div className="flex-1 relative">
+        <Canvas shadows camera={{ position: [-16, 2, -2], fov: 50 }}>
+          <ambientLight intensity={0.6} />
+          <directionalLight position={[10, 10, 5]} intensity={1.5} castShadow />
           <Suspense fallback={null}>
-            <TexturedFloor />
             <Courtroom3DModel />
+            <TexturedFloor />
             <Character
               modelPath="/models/judge.glb"
+              position={[-16, 0, -2]}
               scale={1.2}
               label="القاضي"
-              speech={speechData["القاضي"]}
+              speech={currentSpeech["القاضي"]}
             />
             <Character
               modelPath="/models/lawyer.glb"
-              position={[-11, 0.6, 1]}
-              scale={1.2}
+              position={[-14, 0, -4]}
+              scale={1}
               label="المحامي"
-              speech={speechData["المحامي"]}
+              speech={currentSpeech["المحامي"]}
+            />
+            {/* 
+            <Character
+              modelPath="/models/prosecutor.glb"
+              position={[-18, 0, -4]}
+              scale={1}
+              label="المدعي"
+              speech={currentSpeech["المدعي"]}
             />
             <Character
-              modelPath="/models/witness.glb"
-              position={[3, 0.6, 2]}
-              scale={1.2}
-              label="الشاهد"
-              speech={speechData["الشاهد"]}
+              modelPath="/models/defendant.glb"
+              position={[-16, 0, -6]}
+              scale={1}
+              label="المتهم"
+              speech={currentSpeech["المتهم"]}
             />
-            {colleagues.map((col, index) => {
-              const angle = (index / colleagues.length) * Math.PI * 2;
-              const radius = 4;
-              const x = -16 + radius * Math.cos(angle);
-              const z = -2 + radius * Math.sin(angle);
-              const label = `${col.name}${
-                col.caseNumber ? ` - ${col.caseNumber}` : ""
-              }`;
-              return (
-                <Character
-                  key={`${col.name}-${index}`}
-                  modelPath="/models/witness.glb"
-                  position={[x, 0.6, z]}
-                  scale={1}
-                  label={label}
-                  speech={speechData[col.name]}
-                />
-              );
-            })}
-            <Environment preset="city" />
+            */}
+            <Character
+              modelPath="/models/witness.glb"
+              position={[-12, 0, -6]}
+              scale={1}
+              label="الشاهد"
+              speech={currentSpeech["الشاهد"]}
+            />
           </Suspense>
-          <OrbitControls target={cameraTarget} enablePan enableZoom />
+          <OrbitControls target={[-16, 1, -2]} />
         </Canvas>
+
+        {/* صندوق المحادثة */}
+        <div className="absolute bottom-0 left-0 w-full bg-black/60 text-white p-4 flex gap-2">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="💬 اكتب رسالتك..."
+            className="flex-1 p-2 rounded text-black"
+          />
+          <button
+            onClick={handleSend}
+            className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+          >
+            إرسال
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-// ======================== التطبيق الرئيسي ========================
+// ======================== المكون الرئيسي ========================
 export default function VirtualCourt() {
-  const [screen, setScreen] = useState("menu");
-  const [showServers, setShowServers] = useState(false);
-  const [caseFile, setCaseFile] = useState({
-    court: "",
-    subCourt: "",
-    city: "",
-    caseNumber: "",
-    sessionNumber: "",
-    date: "",
-    time: "",
-    character: "",
-  });
+  const [menu, setMenu] = useState("main"); // main | servers | settings | court
+  const [activeServer, setActiveServer] = useState(null);
+  const [courtData, setCourtData] = useState(null);
+
+  const handleStartCourt = (data) => {
+    setCourtData({ ...data, participants: [data.role] });
+    setActiveServer({
+      ...data,
+      participants: [data.role],
+    });
+    setMenu("court");
+  };
 
   return (
     <>
-      {screen === "menu" && (
+      {menu === "main" && (
         <MainMenu
-          onDiscover={() => setShowServers(true)}
-          onSettings={() => setScreen("settings")}
-          onExit={() => setScreen("exit")}
+          onDiscover={() => setMenu("servers")}
+          onSettings={() => setMenu("settings")}
+          onExit={() => alert("⬅️ العودة للرئيسية")}
         />
       )}
-      {showServers && <ServersOverlay onClose={() => setShowServers(false)} />}
-      {screen === "settings" && (
-        <CourtSettings
-          onBack={() => setScreen("menu")}
-          onEnter={() => setScreen("court")}
-          caseFile={caseFile}
-          setCaseFile={setCaseFile}
+      {menu === "servers" && (
+        <ServersOverlay
+          onClose={() => setMenu("main")}
+          activeServer={activeServer}
         />
       )}
-      {screen === "court" && <Court3D caseFile={caseFile} />}
-      {screen === "exit" && (
-        <div className="text-center mt-20">👋 تم الخروج</div>
+      {menu === "settings" && <CourtSettings onStart={handleStartCourt} />}
+      {menu === "court" && (
+        <Court3D courtData={courtData} onExit={() => setMenu("main")} />
       )}
     </>
   );
