@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>منصة الذكاء الاصطناعي القانوني</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap");
+      body {
+        font-family: "Tajawal", sans-serif;
+      }
+      .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      }
+      .chat-bubble {
+        animation: float 3s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+        animation: fadeIn 0.5s ease;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gradient-to-br from-gray-900 to-blue-900 text-white min-h-screen flex flex-col"
+  >
+    <!-- الهيدر -->
+    <header
+      class="bg-blue-800/30 backdrop-blur-md py-4 px-6 border-b border-blue-600/20 sticky top-0 z-50"
+    >
+      <div class="container mx-auto flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <div class="bg-blue-500 p-2 rounded-lg">
+            <i class="fa-solid fa-scale-balanced text-2xl"></i>
+          </div>
+          <h1 class="text-2xl font-bold">منصة الذكاء الاصطناعي القانوني</h1>
+        </div>
+        <div class="flex space-x-4">
+          <button
+            class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg transition"
+          >
+            تسجيل الدخول
+          </button>
+          <button
+            class="bg-green-600 hover:bg-green-500 px-4 py-2 rounded-lg transition"
+          >
+            تجربة مجانية
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- شريط التنقل -->
+    <nav class="bg-gray-800/70 backdrop-blur-md py-3 px-6">
+      <div class="container mx-auto flex justify-center space-x-8">
+        <a href="#" class="hover:text-blue-300 transition">الرئيسية</a>
+        <a href="#" class="hover:text-blue-300 transition">الأدوات</a>
+        <a href="#" class="hover:text-blue-300 transition">المواد القانونية</a>
+        <a href="#" class="hover:text-blue-300 transition">الإحصائيات</a>
+        <a href="#" class="hover:text-blue-300 transition">المساعدة</a>
+      </div>
+    </nav>
+
+    <!-- قسم المقدمة -->
+    <section class="py-16 px-4 text-center">
+      <div class="container mx-auto max-w-3xl">
+        <h2 class="text-4xl font-bold mb-6">
+          منصتك الشاملة للخدمات القانونية بالذكاء الاصطناعي
+        </h2>
+        <p class="text-xl text-gray-300 mb-10">
+          وفر وقتك وطور عملك بأحدث أدوات الذكاء الاصطناعي المصممة خصيصًا
+          للمحامين والمستشارين القانونيين
+        </p>
+        <div class="flex justify-center space-x-4">
+          <button
+            class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-lg text-lg font-medium transition"
+          >
+            ابدأ الآن
+          </button>
+          <button
+            class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg text-lg font-medium transition"
+          >
+            شاهد العرض التوضيحي
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- شريط التبويبات -->
+    <div class="container mx-auto px-4 mt-6">
+      <div class="flex justify-center border-b border-gray-700">
+        <button
+          class="tab-btn py-3 px-6 font-medium text-blue-400 border-b-2 border-blue-400"
+          data-tab="main"
+        >
+          القائمة الرئيسية
+        </button>
+        <button
+          class="tab-btn py-3 px-6 font-medium text-gray-400"
+          data-tab="tools"
+        >
+          أدوات الذكاء الاصطناعي
+        </button>
+        <button
+          class="tab-btn py-3 px-6 font-medium text-gray-400"
+          data-tab="legal"
+        >
+          الأقسام القانونية
+        </button>
+      </div>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="flex-1 container mx-auto px-4 py-8">
+      <!-- تبويب القائمة الرئيسية -->
+      <div id="main-tab" class="tab-content active">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div class="card bg-gray-800/50 p-6 rounded-xl backdrop-blur-md">
+            <h3 class="text-2xl font-bold mb-4">
+              <i class="fa-solid fa-file-contract text-blue-400 mr-2"></i> صياغة
+              المستندات
+            </h3>
+            <p class="text-gray-300 mb-4">
+              قم بإنشاء مستندات قانونية دقيقة في دقائق باستخدام ذكاء اصطناعي
+              متخصص
+            </p>
+            <button
+              class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg transition"
+            >
+              جرب الآن
+            </button>
+          </div>
+          <div class="card bg-gray-800/50 p-6 rounded-xl backdrop-blur-md">
+            <h3 class="text-2xl font-bold mb-4">
+              <i class="fa-solid fa-magnifying-glass text-green-400 mr-2"></i>
+              البحث القانوني
+            </h3>
+            <p class="text-gray-300 mb-4">
+              ابحث في الملايين من الوثائق والقضايا القانونية في ثوانٍ
+            </p>
+            <button
+              class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg transition"
+            >
+              جرب الآن
+            </button>
+          </div>
+          <div class="card bg-gray-800/50 p-6 rounded-xl backdrop-blur-md">
+            <h3 class="text-2xl font-bold mb-4">
+              <i class="fa-solid-scale-balanced text-yellow-400 mr-2"></i> تحليل
+              القضايا
+            </h3>
+            <p class="text-gray-300 mb-4">
+              حلل القضايا السابقة وتوقع النتائج بناءً على البيانات التاريخية
+            </p>
+            <button
+              class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg transition"
+            >
+              جرب الآن
+            </button>
+          </div>
+          <div class="card bg-gray-800/50 p-6 rounded-xl backdrop-blur-md">
+            <h3 class="text-2xl font-bold mb-4">
+              <i class="fa-solid fa-chart-line text-purple-400 mr-2"></i>
+              إحصائيات قانونية
+            </h3>
+            <p class="text-gray-300 mb-4">
+              احصل على إحصائيات مفصلة عن القضايا والأنظمة القانونية
+            </p>
+            <button
+              class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg transition"
+            >
+              جرب الآن
+            </button>
+          </div>
+        </div>
+
+        <!-- الإحصائيات -->
+        <div class="bg-gray-800/30 rounded-2xl p-8 backdrop-blur-md">
+          <h2 class="text-3xl font-bold text-center mb-10">إحصائيات منصتنا</h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            <div>
+              <div class="text-4xl font-bold text-blue-400">+500</div>
+              <div class="text-gray-400">مستند يولد يوميًا</div>
+            </div>
+            <div>
+              <div class="text-4xl font-bold text-green-400">+1M</div>
+              <div class="text-gray-400">وثيقة قانونية في قاعدة البيانات</div>
+            </div>
+            <div>
+              <div class="text-4xl font-bold text-yellow-400">+2K</div>
+              <div class="text-gray-400">مستخدم نشط</div>
+            </div>
+            <div>
+              <div class="text-4xl font-bold text-purple-400">95%</div>
+              <div class="text-gray-400">دقة في التحليلات</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- تبويب أدوات الذكاء الاصطناعي -->
+      <div id="tools-tab" class="tab-content">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+          <div class="bg-gray-800/50 p-6 rounded-xl backdrop-blur-md">
+            <h3 class="text-2xl font-bold mb-4">
+              <i class="fa-solid fa-robot text-blue-400 mr-2"></i> المساعد
+              القانوني الذكي
+            </h3>
+            <p class="text-gray-300 mb-4">
+              اطرح أسئلة قانونية معقدة واحصل على إجابات فورية من مساعدنا المدرب
+              على آلاف الوثائق القانونية
+            </p>
+            <div class="bg-gray-900/50 p-4 rounded-lg mb-4">
+              <div class="flex space-x-3">
+                <div
+                  class="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center"
+                >
+                  ذ
+                </div>
+                <div class="flex-1">
+                  <div class="font-medium">المساعد الذكي</div>
+                  <div class="text-sm text-gray-400">
+                    كيف يمكنني مساعدتك اليوم؟
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex">
+              <input
+                type="text"
+                placeholder="اكتب سؤالك هنا..."
+                class="flex-1 bg-gray-700 rounded-l-lg px-4 py-2 focus:outline-none"
+              />
+              <button
+                class="bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-r-lg transition"
+              >
+                <i class="fa-solid fa-paper-plane"></i>
+              </button>
+            </div>
+          </div>
+          <div class="bg-gray-800/50 p-6 rounded-xl backdrop-blur-md">
+            <h3 class="text-2xl font-bold mb-4">
+              <i
+                class="fa-solid fa-wand-magic-sparkles text-green-400 mr-2"
+              ></i>
+              أداة توليف النصوص القانونية
+            </h3>
+            <p class="text-gray-300 mb-4">
+              قم بإنشاء نصوص قانونية متقنة باستخدام ذكاء اصطناعي متقدم يفهم
+              السياق القانوني
+            </p>
+            <div class="mb-4">
+              <label class="block text-gray-400 mb-2">نوع المستند</label>
+              <select
+                class="w-full bg-gray-700 rounded-lg px-4 py-2 focus:outline-none"
+              >
+                <option>عقد عمل</option>
+                <option>عقد تأجير</option>
+                <option>عقد شراكة</option>
+                <option>اتفاقية سرية</option>
+              </select>
+            </div>
+            <button
+              class="w-full bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg transition"
+            >
+              إنشاء المستند
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- تبويب الأقسام القانونية -->
+      <div id="legal-tab" class="tab-content">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div class="bg-gray-800/50 p-6 rounded-xl backdrop-blur-md">
+            <h3 class="text-xl font-bold mb-4 text-blue-300">
+              <i class="fa-solid fa-gavel mr-2"></i> القانون المدني
+            </h3>
+            <ul class="space-y-2">
+              <li class="hover:text-blue-300 transition cursor-pointer">
+                العقود والاتفاقيات
+              </li>
+              <li class="hover:text-blue-300 transition cursor-pointer">
+                الالتزامات والتعويضات
+              </li>
+              <li class="hover:text-blue-300 transition cursor-pointer">
+                حقوق الملكية
+              </li>
+            </ul>
+          </div>
+          <div class="bg-gray-800/50 p-6 rounded-xl backdrop-blur-md">
+            <h3 class="text-xl font-bold mb-4 text-green-300">
+              <i class="fa-solid fa-scale-balanced mr-2"></i> القانون التجاري
+            </h3>
+            <ul class="space-y-2">
+              <li class="hover:text-green-300 transition cursor-pointer">
+                الشركات والمؤسسات
+              </li>
+              <li class="hover:text-green-300 transition cursor-pointer">
+                الأوراق التجارية
+              </li>
+              <li class="hover:text-green-300 transition cursor-pointer">
+                الإفلاس
+              </li>
+            </ul>
+          </div>
+          <div class="bg-gray-800/50 p-6 rounded-xl backdrop-blur-md">
+            <h3 class="text-xl font-bold mb-4 text-yellow-300">
+              <i class="fa-solid fa-handcuffs mr-2"></i> القانون الجنائي
+            </h3>
+            <ul class="space-y-2">
+              <li class="hover:text-yellow-300 transition cursor-pointer">
+                الجنايات
+              </li>
+              <li class="hover:text-yellow-300 transition cursor-pointer">
+                المخالفات
+              </li>
+              <li class="hover:text-yellow-300 transition cursor-pointer">
+                أصول المحاكمات
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- الفوتر -->
+    <footer
+      class="bg-gray-800/70 backdrop-blur-md py-10 px-4 border-t border-gray-700/30"
+    >
+      <div class="container mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 class="text-xl font-bold mb-4">
+              منصة الذكاء الاصطناعي القانوني
+            </h3>
+            <p class="text-gray-400">
+              منصتنا تقدم حلولاً قانونية ذكية باستخدام أحدث تقنيات الذكاء
+              الاصطناعي لتسهيل المهام القانونية المعقدة.
+            </p>
+          </div>
+          <div>
+            <h4 class="text-lg font-medium mb-4">روابط سريعة</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-blue-300 transition"
+                  >الرئيسية</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-blue-300 transition"
+                  >عن المنصة</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-blue-300 transition"
+                  >الأسعار</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-blue-300 transition"
+                  >اتصل بنا</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-medium mb-4">الموارد</h4>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="text-gray-400 hover:text-blue-300 transition"
+                  >المدونة</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-blue-300 transition"
+                  >الوثائق</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-blue-300 transition"
+                  >الدعم</a
+                >
+              </li>
+              <li>
+                <a href="#" class="text-gray-400 hover:text-blue-300 transition"
+                  >الأسئلة الشائعة</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-lg font-medium mb-4">اتصل بنا</h4>
+            <div class="space-y-2">
+              <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-envelope text-blue-400"></i>
+                <span class="text-gray-400">info@legal-ai.com</span>
+              </div>
+              <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-phone text-blue-400"></i>
+                <span class="text-gray-400">+966 12 345 6789</span>
+              </div>
+              <div class="flex space-x-4 mt-4">
+                <a href="#" class="text-gray-400 hover:text-blue-300 transition"
+                  ><i class="fa-brands fa-twitter fa-lg"></i
+                ></a>
+                <a href="#" class="text-gray-400 hover:text-blue-300 transition"
+                  ><i class="fa-brands fa-linkedin fa-lg"></i
+                ></a>
+                <a href="#" class="text-gray-400 hover:text-blue-300 transition"
+                  ><i class="fa-brands fa-facebook fa-lg"></i
+                ></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="border-t border-gray-700/30 mt-8 pt-6 text-center text-gray-500"
+        >
+          <p>© 2023 منصة الذكاء الاصطناعي القانوني. جميع الحقوق محفوظة.</p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // تبويبات التنقل
+      document.addEventListener("DOMContentLoaded", function () {
+        const tabButtons = document.querySelectorAll(".tab-btn");
+        const tabContents = document.querySelectorAll(".tab-content");
+
+        tabButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const tabId = button.getAttribute("data-tab");
+
+            // إلغاء تنشيط جميع الأزرار
+            tabButtons.forEach((btn) => {
+              btn.classList.remove(
+                "text-blue-400",
+                "border-b-2",
+                "border-blue-400"
+              );
+              btn.classList.add("text-gray-400");
+            });
+
+            // تنشيط الزر المحدد
+            button.classList.add(
+              "text-blue-400",
+              "border-b-2",
+              "border-blue-400"
+            );
+            button.classList.remove("text-gray-400");
+
+            // إخفاء جميع المحتويات
+            tabContents.forEach((content) => {
+              content.classList.remove("active");
+            });
+
+            // إظهار المحتوى المحدد
+            document.getElementById(`${tabId}-tab`).classList.add("active");
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
