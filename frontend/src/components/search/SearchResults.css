@@ -1,0 +1,164 @@
+.search-results {
+  margin-top: 20px;
+}
+
+.results-header {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.results-header h3 {
+  color: #2d3748;
+  margin-bottom: 8px;
+  font-size: 1.5rem;
+}
+
+.results-header p {
+  color: #718096;
+  margin: 0;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.result-item {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.result-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: #3182ce;
+}
+
+.result-type-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.result-type-badge[data-type="law"] {
+  background: #ebf8ff;
+  color: #3182ce;
+}
+
+.result-type-badge[data-type="judgment"] {
+  background: #fed7d7;
+  color: #e53e3e;
+}
+
+.result-type-badge[data-type="procedure"] {
+  background: #e9f5f2;
+  color: #38a169;
+}
+
+.result-content h4 {
+  color: #2d3748;
+  margin-bottom: 8px;
+  font-size: 1.125rem;
+}
+
+.result-description {
+  color: #718096;
+  line-height: 1.6;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.result-meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+
+.result-date,
+.result-category,
+.result-confidence {
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: #f7fafc;
+  color: #4a5568;
+}
+
+.result-confidence {
+  background: #ebf8ff;
+  color: #3182ce;
+}
+
+/* حالات التحميل والفراغ */
+.search-results-loading {
+  text-align: center;
+  padding: 40px;
+  color: #718096;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid #3182ce;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.search-results-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #718096;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.search-results-empty h3 {
+  color: #2d3748;
+  margin-bottom: 12px;
+  font-size: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .result-item {
+    padding: 16px;
+  }
+
+  .result-meta {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .results-header h3 {
+    font-size: 1.25rem;
+  }
+}
