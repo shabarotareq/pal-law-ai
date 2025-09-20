@@ -1,0 +1,54 @@
+{
+  "caseId": "CASE-2025-001",
+  "title": "قضية: سرقة محل (عينة)",
+  "participants": [
+    {
+      "id": "p1",
+      "name": "القاضي أحمد",
+      "role": "judge"
+    },
+    {
+      "id": "p2",
+      "name": "وليد المحامي",
+      "role": "defense"
+    },
+    {
+      "id": "p3",
+      "name": "ليلى محامية النيابة",
+      "role": "prosecutor"
+    },
+    {
+      "id": "p4",
+      "name": "الشاهد سامي",
+      "role": "witness"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "e1",
+      "type": "image",
+      "title": "كاميرا المحل",
+      "path": "/assets/sample-evidence/cam1.jpg"
+    },
+    {
+      "id": "e2",
+      "type": "audio",
+      "title": "تسجيل صوتي",
+      "path": "/assets/sample-evidence/rec1.mp3"
+    }
+  ],
+  "timeline": [
+    {
+      "stage": "opening",
+      "script": "المرافعة الافتتاحية للنيابة..."
+    },
+    {
+      "stage": "witness",
+      "script": "استماع للشاهد سامي..."
+    }
+  ],
+  "rules": {
+    "objectionsAllowed": true,
+    "maxSpeakingTime": 180
+  }
+}
