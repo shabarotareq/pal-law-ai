@@ -1,51 +1,17 @@
 "use client";
 import React, { useState, useEffect, Suspense, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Environment, useGLTF, Html } from "@react-three/drei";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import {
+  OrbitControls,
+  Environment,
+  useGLTF,
+  Html,
+  useTexture,
+} from "@react-three/drei";
+import * as THREE from "three";
 import jsPDF from "jspdf";
 
-// 🎭 تحميل نموذج المحكمة
-function CourtroomModel() {
-  const { scene } = useGLTF("/models/courtroom.glb");
-  useEffect(() => {
-    scene.traverse((c) => {
-      if (c.isMesh) {
-        c.castShadow = true;
-        c.receiveShadow = true;
-      }
-    });
-  }, [scene]);
-  return <primitive object={scene} scale={1.5} position={[0, -1.5, 0]} />;
-}
-
-// 🎭 شخصيات المحكمة
-function Character({ modelPath, position, label, scale = 1 }) {
-  const { scene } = useGLTF(modelPath);
-  const ref = useRef();
-  useEffect(() => {
-    scene.traverse((child) => {
-      if (child.isMesh) {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      }
-    });
-  }, [scene]);
-  useFrame(() => {
-    if (ref.current) ref.current.position.set(...position);
-  });
-  return (
-    <group>
-      <primitive ref={ref} object={scene} scale={scale} />
-      <Html position={[position[0], position[1] + 2, position[2]]} center>
-        <div className="bg-black/70 text-white text-xs px-2 py-1 rounded text-center">
-          {label}
-        </div>
-      </Html>
-    </group>
-  );
-}
-
-// 🎛️ اختيار الشخصية
+// ======================= CharacterSelector =======================
 function CharacterSelector({ selected, onSelect }) {
   const characters = ["القاضي", "المحامي", "المتهم", "الشاهد", "الجمهور"];
   return (
@@ -67,7 +33,7 @@ function CharacterSelector({ selected, onSelect }) {
   );
 }
 
-// 🎛️ القائمة الرئيسية
+// ======================= MainMenu =======================
 function MainMenu({ onDiscover, onSettings, onExit }) {
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen text-white bg-gradient-to-br from-purple-900 via-pink-800 to-red-700 p-4">
@@ -105,12 +71,12 @@ function MainMenu({ onDiscover, onSettings, onExit }) {
   );
 }
 
-// 🛰️ نافذة الخوادم الكاملة مع التبويبات والأزرار
+// ======================= ServersOverlay =======================
 function ServersOverlay({ onClose }) {
   const [activeTab, setActiveTab] = useState(0);
   const [colleagues, setColleagues] = useState(["أحمد", "سارة"]);
   const [newColleague, setNewColleague] = useState("");
-  const [servers, setServers] = useState([
+  const servers = [
     {
       server: "خادم 1",
       session: "9:00",
@@ -125,9 +91,9 @@ function ServersOverlay({ onClose }) {
       map: "الفرعية",
       delay: 2,
     },
-  ]);
-  const getDelayColor = (d) =>
-    d === 0 ? "bg-green-600" : d <= 2 ? "bg-yellow-500" : "bg-red-600";
+  ];
+  const getDelayColor = (delay) =>
+    delay === 0 ? "bg-green-600" : delay <= 2 ? "bg-yellow-500" : "bg-red-600";
 
   const handleButtonAction = (btn) => {
     switch (btn) {
@@ -140,16 +106,13 @@ function ServersOverlay({ onClose }) {
         alert("🔄 تم تحديث بيانات الخوادم");
         break;
       case "إضافة خادم":
-        setServers([
-          ...servers,
-          {
-            server: `خادم ${servers.length + 1}`,
-            session: "10:00",
-            persons: "محامي، شاهد",
-            map: "جديد",
-            delay: Math.floor(Math.random() * 3),
-          },
-        ]);
+        servers.push({
+          server: `خادم ${servers.length + 1}`,
+          session: "10:00",
+          persons: "محامي، شاهد",
+          map: "جديد",
+          delay: Math.floor(Math.random() * 3),
+        });
         alert("➕ تم إضافة خادم جديد");
         break;
       case "تغيير التصفيات":
@@ -175,18 +138,18 @@ function ServersOverlay({ onClose }) {
             </tr>
           </thead>
           <tbody>
-            {servers.map((r, i) => (
+            {servers.map((row, i) => (
               <tr key={i}>
-                <td className="p-2 border border-white/40">{r.server}</td>
-                <td className="p-2 border border-white/40">{r.session}</td>
-                <td className="p-2 border border-white/40">{r.persons}</td>
-                <td className="p-2 border border-white/40">{r.map}</td>
+                <td className="p-2 border border-white/40">{row.server}</td>
+                <td className="p-2 border border-white/40">{row.session}</td>
+                <td className="p-2 border border-white/40">{row.persons}</td>
+                <td className="p-2 border border-white/40">{row.map}</td>
                 <td
                   className={`p-2 border border-white/40 text-center ${getDelayColor(
-                    r.delay
+                    row.delay
                   )}`}
                 >
-                  {r.delay} ث
+                  {row.delay} ث
                 </td>
               </tr>
             ))}
@@ -232,7 +195,7 @@ function ServersOverlay({ onClose }) {
     {
       title: "الزملاء",
       content: (
-        <div className="space-y-4">
+        <div className="text-white space-y-4">
           <div className="flex gap-2">
             <input
               type="text"
@@ -242,13 +205,13 @@ function ServersOverlay({ onClose }) {
               className="p-2 rounded text-black flex-1"
             />
             <button
-              className="px-4 py-2 bg-green-600 rounded hover:bg-green-700 transition"
               onClick={() => {
                 if (newColleague.trim()) {
                   setColleagues([...colleagues, newColleague.trim()]);
                   setNewColleague("");
                 }
               }}
+              className="px-4 py-2 bg-green-600 rounded hover:bg-green-700 transition"
             >
               ➕ إضافة
             </button>
@@ -284,7 +247,7 @@ function ServersOverlay({ onClose }) {
           🛰️ الخوادم المتوفرة
         </h2>
         <div className="flex justify-start px-4 gap-2 mb-0">
-          {tabs.map((t, i) => (
+          {tabs.map((tab, i) => (
             <button
               key={i}
               onClick={() => setActiveTab(i)}
@@ -294,7 +257,7 @@ function ServersOverlay({ onClose }) {
                   : "bg-white/20 text-white hover:bg-white/30 rounded-t-xl"
               }`}
             >
-              {t.title}
+              {tab.title}
             </button>
           ))}
         </div>
@@ -302,13 +265,13 @@ function ServersOverlay({ onClose }) {
           {tabs[activeTab].content}
         </div>
         <div className="absolute bottom-4 left-0 w-full flex justify-center gap-3">
-          {tabs[activeTab].buttons.map((b, i) => (
+          {tabs[activeTab].buttons.map((btn, i) => (
             <button
               key={i}
-              onClick={() => handleButtonAction(b)}
+              onClick={() => handleButtonAction(btn)}
               className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 transition text-white shadow"
             >
-              {b}
+              {btn}
             </button>
           ))}
         </div>
@@ -325,8 +288,8 @@ function ServersOverlay({ onClose }) {
   );
 }
 
-// ⚙️ إعدادات المحكمة
-function CourtSettings({ caseFile, setCaseFile, onBack, onEnter }) {
+// ======================= CourtSettings =======================
+function CourtSettings({ onBack, onEnter, caseFile, setCaseFile }) {
   const savePDF = () => {
     const doc = new jsPDF();
     doc.text(`المحكمة: ${caseFile.court} ${caseFile.subCourt || ""}`, 10, 10);
@@ -338,6 +301,7 @@ function CourtSettings({ caseFile, setCaseFile, onBack, onEnter }) {
     doc.text(`الشخصية: ${caseFile.character}`, 10, 70);
     doc.save(`Case_${caseFile.caseNumber}.pdf`);
   };
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-indigo-900 to-purple-800 text-white p-6">
       <h2 className="text-3xl font-bold mb-6">⚖️ إعدادات المحكمة</h2>
@@ -436,77 +400,149 @@ function CourtSettings({ caseFile, setCaseFile, onBack, onEnter }) {
   );
 }
 
-// 🎥 المحكمة 3D
-function Court3D({ caseFile }) {
-  const positions = [
-    {
-      name: "القاضي",
-      model: "/models/judge.glb",
-      pos: [-2, 0.6, -2],
-      scale: 1.2,
-    },
-    {
-      name: "المحامي",
-      model: "/models/lawyer.glb",
-      pos: [0, 0.6, -1],
-      scale: 1.2,
-    },
-    {
-      name: "الشاهد",
-      model: "/models/witness.glb",
-      pos: [2, 0.6, 0],
-      scale: 1.2,
-    },
-    /*    {
-      name: "المتهم",
-      model: "/models/defendant.glb",
-      pos: [0, 0.6, 1],
-      scale: 1.2,
-    },
-    {
-      name: "الجمهور",
-      model: "/models/public.glb",
-      pos: [4, 0.6, 2],
-      scale: 1,
-    }, */
-  ];
+// ======================= CourtroomModel with wood texture =======================
+function TexturedFloor() {
+  const texture = useTexture("/textures/wood.png");
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(10, 10);
   return (
-    <div className="w-screen h-screen relative bg-black text-white">
-      <div className="absolute top-2 left-2 bg-gray-800/80 p-3 rounded-lg text-sm">
+    <mesh receiveShadow rotation-x={-Math.PI / 2} position={[0, -1.5, 0]}>
+      <planeGeometry args={[50, 50]} />
+      <meshStandardMaterial map={texture} />
+    </mesh>
+  );
+}
+
+function Courtroom3DModel() {
+  const { scene } = useGLTF("/models/courtroom.glb");
+  useEffect(() => {
+    scene.traverse((c) => {
+      if (c.isMesh) {
+        c.castShadow = true;
+        c.receiveShadow = true;
+      }
+    });
+  }, [scene]);
+  return <primitive object={scene} scale={1.5} position={[0, -1.5, 0]} />;
+}
+
+// ======================= Character =======================
+function Character({ modelPath, position = [0, 0.6, 0], scale = 1, label }) {
+  const { scene } = useGLTF(modelPath);
+  const ref = useRef();
+  const [pos, setPos] = useState(new THREE.Vector3(...position));
+
+  useEffect(() => {
+    scene.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+    if (label.includes("القاضي")) {
+      const judgePos = new THREE.Vector3(-16, 1.2, -2);
+      setPos(judgePos);
+      if (ref.current) {
+        ref.current.position.copy(judgePos);
+        ref.current.rotation.set(0, Math.PI / 2, 0);
+      }
+    } else setPos(new THREE.Vector3(position[0], 0.6, position[2]));
+  }, [scene, label, position]);
+
+  useFrame(() => {
+    if (ref.current) {
+      ref.current.position.set(pos.x, pos.y, pos.z);
+      if (!label.includes("القاضي"))
+        ref.current.lookAt(new THREE.Vector3(-16, 1.2, -2));
+    }
+  });
+
+  return (
+    <group>
+      <primitive ref={ref} object={scene} scale={scale} />
+      <Html position={[pos.x, pos.y + 2, pos.z]} center>
+        <div className="bg-black/70 text-white text-xs p-2 rounded-md text-center">
+          {label}
+        </div>
+      </Html>
+    </group>
+  );
+}
+
+// ======================= Court3D Screen =======================
+function Court3D({ caseFile, colleagues = [] }) {
+  return (
+    <div className="w-screen h-screen relative bg-black text-white flex">
+      <div className="absolute top-0 right-0 w-80 h-full bg-gray-900/90 p-4 text-sm overflow-y-auto">
+        <h2 className="font-bold text-lg mb-2">📋 معلومات الجلسة</h2>
         <p>
-          ⚖️ المحكمة: {caseFile.court} {caseFile.subCourt || ""}
+          ⚖️ المحكمة: {caseFile.court} {caseFile.subCourt}
         </p>
         <p>🏙️ المدينة: {caseFile.city}</p>
         <p>📑 القضية: {caseFile.caseNumber}</p>
         <p>🔢 الجلسة: {caseFile.sessionNumber}</p>
-        <p>
-          📅 {caseFile.date} ⏰ {caseFile.time}
-        </p>
+        <p>📅 التاريخ: {caseFile.date}</p>
+        <p>⏰ الوقت: {caseFile.time}</p>
         <p>👤 الشخصية: {caseFile.character}</p>
-      </div>
-      <Canvas shadows camera={{ position: [-15, 8, 15], fov: 45 }}>
-        <ambientLight intensity={0.6} />
-        <directionalLight position={[10, 20, 10]} intensity={1} castShadow />
-        <Suspense fallback={null}>
-          <CourtroomModel />
-          {positions.map((p, i) => (
-            <Character
-              key={i}
-              modelPath={p.model}
-              position={p.pos}
-              label={p.name}
-              scale={p.scale}
-            />
+        <h3 className="mt-4 font-semibold">👥 الزملاء في الجلسة:</h3>
+        <ul className="list-disc list-inside">
+          {colleagues.map((col, i) => (
+            <li key={i}>
+              {col.name} {col.caseNumber && `- ${col.caseNumber}`}
+            </li>
           ))}
+        </ul>
+      </div>
+      <Canvas
+        shadows
+        camera={{ position: [-28, 6, 7], fov: 40 }}
+        style={{ flex: 1 }}
+      >
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[5, 15, 5]} intensity={1} castShadow />
+        <Suspense fallback={null}>
+          <TexturedFloor />
+          <Courtroom3DModel />
+          <Character modelPath="/models/judge.glb" scale={1.2} label="القاضي" />
+          <Character
+            modelPath="/models/lawyer.glb"
+            position={[-11, 0.6, 1]}
+            scale={1.2}
+            label="المحامي"
+          />
+          <Character
+            modelPath="/models/witness.glb"
+            position={[3, 0.6, 2]}
+            scale={1.2}
+            label="الشاهد"
+          />
+          {colleagues.map((col, index) => {
+            const angle = (index / colleagues.length) * Math.PI * 2;
+            const radius = 4;
+            const x = -16 + radius * Math.cos(angle);
+            const z = -2 + radius * Math.sin(angle);
+            const label = `${col.name}${
+              col.caseNumber ? ` - ${col.caseNumber}` : ""
+            }`;
+            return (
+              <Character
+                key={`${col.name}-${index}`}
+                modelPath="/models/witness.glb"
+                position={[x, 0.6, z]}
+                scale={1}
+                label={label}
+              />
+            );
+          })}
           <Environment preset="city" />
         </Suspense>
-        <OrbitControls target={[0, 1.2, -4]} enablePan enableZoom />
+        <OrbitControls target={[-16, 1.2, -2]} enablePan enableZoom />
       </Canvas>
     </div>
   );
 }
 
-// 🏁 التطبيق الرئيسي
+// ======================= Main VirtualCourt App =======================
 export default function VirtualCourt() {
   const [screen, setScreen] = useState("menu");
   const [showServers, setShowServers] = useState(false);
@@ -520,6 +556,8 @@ export default function VirtualCourt() {
     time: "",
     character: "",
   });
+  const [colleagues, setColleagues] = useState([]);
+
   return (
     <>
       {screen === "menu" && (
@@ -532,15 +570,17 @@ export default function VirtualCourt() {
       {showServers && <ServersOverlay onClose={() => setShowServers(false)} />}
       {screen === "settings" && (
         <CourtSettings
-          caseFile={caseFile}
-          setCaseFile={setCaseFile}
           onBack={() => setScreen("menu")}
           onEnter={() => setScreen("court")}
+          caseFile={caseFile}
+          setCaseFile={setCaseFile}
         />
       )}
-      {screen === "court" && <Court3D caseFile={caseFile} />}
+      {screen === "court" && (
+        <Court3D caseFile={caseFile} colleagues={colleagues} />
+      )}
       {screen === "exit" && (
-        <div className="text-center mt-20 text-white">👋 تم الخروج</div>
+        <div className="text-center mt-20">👋 تم الخروج</div>
       )}
     </>
   );
