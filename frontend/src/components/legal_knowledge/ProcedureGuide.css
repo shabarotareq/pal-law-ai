@@ -1,0 +1,56 @@
+.procedure-guide {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #fefefe;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.procedure-guide h2 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.procedure-guide p {
+  color: #555;
+  line-height: 1.6;
+}
+
+.procedure-list {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+
+.procedure-item {
+  background-color: #eef6ff;
+  margin-bottom: 10px;
+  padding: 12px 15px;
+  border-left: 4px solid #007bff;
+  border-radius: 6px;
+}
+
+.procedure-item h4 {
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+  color: #007bff;
+}
+
+.procedure-item p {
+  margin: 0;
+  color: #555;
+}
+
+.procedure-links a {
+  display: inline-block;
+  margin-top: 5px;
+  color: #007bff;
+  text-decoration: underline;
+  font-size: 0.9rem;
+}
+
+.procedure-links a:hover {
+  color: #0056b3;
+}
