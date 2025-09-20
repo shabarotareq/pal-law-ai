@@ -22,7 +22,6 @@ function CourtroomModel() {
 function Character({ modelPath, position, label, scale = 1 }) {
   const { scene } = useGLTF(modelPath);
   const ref = useRef();
-
   useEffect(() => {
     scene.traverse((child) => {
       if (child.isMesh) {
@@ -31,11 +30,9 @@ function Character({ modelPath, position, label, scale = 1 }) {
       }
     });
   }, [scene]);
-
   useFrame(() => {
     if (ref.current) ref.current.position.set(...position);
   });
-
   return (
     <group>
       <primitive ref={ref} object={scene} scale={scale} />
@@ -108,10 +105,12 @@ function MainMenu({ onDiscover, onSettings, onExit }) {
   );
 }
 
-// 🛰️ نافذة الخوادم
+// 🛰️ نافذة الخوادم الكاملة مع التبويبات والأزرار
 function ServersOverlay({ onClose }) {
   const [activeTab, setActiveTab] = useState(0);
-  const servers = [
+  const [colleagues, setColleagues] = useState(["أحمد", "سارة"]);
+  const [newColleague, setNewColleague] = useState("");
+  const [servers, setServers] = useState([
     {
       server: "خادم 1",
       session: "9:00",
@@ -126,9 +125,41 @@ function ServersOverlay({ onClose }) {
       map: "الفرعية",
       delay: 2,
     },
-  ];
+  ]);
   const getDelayColor = (d) =>
     d === 0 ? "bg-green-600" : d <= 2 ? "bg-yellow-500" : "bg-red-600";
+
+  const handleButtonAction = (btn) => {
+    switch (btn) {
+      case "اتصال":
+        alert("✅ تم الاتصال بالخادم!");
+        break;
+      case "تحديث":
+      case "تحديث سريع":
+      case "تحديث الكل":
+        alert("🔄 تم تحديث بيانات الخوادم");
+        break;
+      case "إضافة خادم":
+        setServers([
+          ...servers,
+          {
+            server: `خادم ${servers.length + 1}`,
+            session: "10:00",
+            persons: "محامي، شاهد",
+            map: "جديد",
+            delay: Math.floor(Math.random() * 3),
+          },
+        ]);
+        alert("➕ تم إضافة خادم جديد");
+        break;
+      case "تغيير التصفيات":
+        alert("⚙️ نافذة تغيير التصفيات (محاكاة)");
+        break;
+      default:
+        alert(`⚠️ الزر "${btn}" غير معرف بعد`);
+    }
+  };
+
   const tabs = [
     {
       title: "الانترنت",
@@ -162,36 +193,90 @@ function ServersOverlay({ onClose }) {
           </tbody>
         </table>
       ),
+      buttons: ["تغيير التصفيات", "تحديث سريع", "تحديث الكل", "اتصال"],
     },
     {
       title: "المفضلة",
       content: (
-        <div className="text-center text-white py-6">⭐ المفضلة فارغة</div>
+        <div className="text-white text-center py-6">
+          ⭐ هنا ستظهر الخوادم المفضلة لديك
+        </div>
       ),
+      buttons: ["إضافة خادم", "تحديث", "اتصال"],
     },
     {
       title: "التاريخ",
       content: (
-        <div className="text-center text-white py-6">🕘 لا يوجد تاريخ</div>
+        <div className="text-white text-center py-6">
+          🕘 سجل الجلسات السابقة
+        </div>
       ),
+      buttons: ["تحديث", "اتصال"],
     },
     {
       title: "المعاينة",
-      content: <div className="text-center text-white py-6">🔍 المعاينة</div>,
+      content: (
+        <div className="text-white text-center py-6">محتوى المعاينة هنا...</div>
+      ),
+      buttons: ["تغيير التصفيات", "تحديث الكل", "اتصال"],
     },
     {
       title: "شبكة محلية",
       content: (
-        <div className="text-center text-white py-6">📡 الشبكة المحلية</div>
+        <div className="text-white text-center py-6">
+          محتوى الشبكة المحلية هنا...
+        </div>
       ),
+      buttons: ["تحديث", "اتصال"],
     },
     {
       title: "الزملاء",
       content: (
-        <div className="text-center text-white py-6">👥 قائمة الزملاء</div>
+        <div className="space-y-4">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={newColleague}
+              onChange={(e) => setNewColleague(e.target.value)}
+              placeholder="أدخل اسم الزميل"
+              className="p-2 rounded text-black flex-1"
+            />
+            <button
+              className="px-4 py-2 bg-green-600 rounded hover:bg-green-700 transition"
+              onClick={() => {
+                if (newColleague.trim()) {
+                  setColleagues([...colleagues, newColleague.trim()]);
+                  setNewColleague("");
+                }
+              }}
+            >
+              ➕ إضافة
+            </button>
+          </div>
+          <ul className="list-disc list-inside space-y-1">
+            {colleagues.map((col, idx) => (
+              <li
+                key={idx}
+                className="flex justify-between items-center bg-white/10 p-2 rounded"
+              >
+                {col}
+                <button
+                  onClick={() =>
+                    setColleagues(colleagues.filter((c) => c !== col))
+                  }
+                  className="px-2 py-1 bg-red-600 rounded hover:bg-red-700 text-white"
+                >
+                  ✕
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
       ),
+      buttons: ["تحديث", "اتصال"],
     },
   ];
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
       <div className="w-[900px] max-w-[95%] h-[500px] bg-gray-900 rounded-xl shadow-2xl text-white flex flex-col relative border border-white/30">
@@ -216,6 +301,17 @@ function ServersOverlay({ onClose }) {
         <div className="flex-1 p-6 overflow-y-auto bg-white/10 text-white rounded-b-xl mx-4 mt-0 rounded-t-none">
           {tabs[activeTab].content}
         </div>
+        <div className="absolute bottom-4 left-0 w-full flex justify-center gap-3">
+          {tabs[activeTab].buttons.map((b, i) => (
+            <button
+              key={i}
+              onClick={() => handleButtonAction(b)}
+              className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 transition text-white shadow"
+            >
+              {b}
+            </button>
+          ))}
+        </div>
         <div className="absolute top-4 right-4">
           <button
             onClick={onClose}
@@ -230,7 +326,7 @@ function ServersOverlay({ onClose }) {
 }
 
 // ⚙️ إعدادات المحكمة
-function CourtSettings({ onBack, onEnter, caseFile, setCaseFile }) {
+function CourtSettings({ caseFile, setCaseFile, onBack, onEnter }) {
   const savePDF = () => {
     const doc = new jsPDF();
     doc.text(`المحكمة: ${caseFile.court} ${caseFile.subCourt || ""}`, 10, 10);
@@ -361,13 +457,13 @@ function Court3D({ caseFile }) {
       pos: [2, 0.6, 0],
       scale: 1.2,
     },
-    /*  {
+    /*    {
       name: "المتهم",
       model: "/models/defendant.glb",
       pos: [0, 0.6, 1],
       scale: 1.2,
     },
-      {
+    {
       name: "الجمهور",
       model: "/models/public.glb",
       pos: [4, 0.6, 2],
@@ -424,7 +520,6 @@ export default function VirtualCourt() {
     time: "",
     character: "",
   });
-
   return (
     <>
       {screen === "menu" && (
@@ -445,7 +540,7 @@ export default function VirtualCourt() {
       )}
       {screen === "court" && <Court3D caseFile={caseFile} />}
       {screen === "exit" && (
-        <div className="text-center mt-20">👋 تم الخروج</div>
+        <div className="text-center mt-20 text-white">👋 تم الخروج</div>
       )}
     </>
   );
