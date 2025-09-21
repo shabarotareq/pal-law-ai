@@ -4,7 +4,13 @@ import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
 import VirtualCourt from "../court/VirtualCourt"; // ✅ استدعاء المكون
 
-const Sidebar = ({ lang = "ar", isOpen = true, onClose, currentUser }) => {
+const Sidebar = ({
+  lang = "ar",
+  isOpen = true,
+  onClose,
+  currentUser,
+  overlayActive = false,
+}) => {
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
   const [heroHeight, setHeroHeight] = useState("100vh");
   const [showCourt, setShowCourt] = useState(false); // ✅ حالة للمحكمة الافتراضية
@@ -41,9 +47,7 @@ const Sidebar = ({ lang = "ar", isOpen = true, onClose, currentUser }) => {
   useEffect(() => {
     const updateHeroDimensions = () => {
       const hero = document.querySelector("#hero-section");
-      if (hero) {
-        setHeroHeight(`${hero.offsetHeight}px`);
-      }
+      if (hero) setHeroHeight(`${hero.offsetHeight}px`);
     };
     updateHeroDimensions();
     window.addEventListener("resize", updateHeroDimensions);
@@ -68,7 +72,12 @@ const Sidebar = ({ lang = "ar", isOpen = true, onClose, currentUser }) => {
 
   return (
     <>
-      {isOpen && (
+      {/* خلفية معتمة للمكونات أسفل المحكمة */}
+      {showCourt && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 z-[9998] pointer-events-none" />
+      )}
+
+      {isOpen && !showCourt && (
         <div
           className="fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden"
           onClick={onClose}
@@ -98,7 +107,8 @@ const Sidebar = ({ lang = "ar", isOpen = true, onClose, currentUser }) => {
               ? "translate-x-full"
               : "-translate-x-full md:translate-x-0"
           }
-          z-50
+          z-40
+          ${showCourt || overlayActive ? "pointer-events-none opacity-50" : ""}
         `}
       >
         <button
@@ -151,9 +161,9 @@ const Sidebar = ({ lang = "ar", isOpen = true, onClose, currentUser }) => {
         </div>
       </aside>
 
-      {/* ✅ Overlay لعرض المحكمة الافتراضية */}
+      {/* Overlay المحكمة الافتراضية */}
       {showCourt && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[9999]">
+        <div className="fixed inset-0 flex items-center justify-center z-[9999]">
           <div className="bg-white rounded-lg p-4 relative w-[95%] h-[95%] overflow-hidden shadow-xl">
             <button
               className="absolute top-2 right-2 text-red-600 font-bold text-xl"
@@ -170,4 +180,3 @@ const Sidebar = ({ lang = "ar", isOpen = true, onClose, currentUser }) => {
 };
 
 export default Sidebar;
-
