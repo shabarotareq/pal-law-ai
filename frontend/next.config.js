@@ -32,9 +32,11 @@ const nextConfig = {
     return config;
   },
 
-  // يظل gzip-size متاح فقط للسيرفر
   experimental: {
+    // يظل gzip-size متاح فقط للسيرفر
     serverComponentsExternalPackages: ["gzip-size"],
+    // تفعيل build worker لتقليل التحذيرات وتحسين الأداء
+    webpackBuildWorker: true,
   },
 };
 
