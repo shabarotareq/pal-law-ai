@@ -1,18 +1,13 @@
 "use client"; // اجعل Layout client component إذا كنت تستخدم useEffect لاحقاً
 
 import "./globals.css";
-import type { Metadata } from "next";
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "عدالة AI | Palestine Law AI",
   description: "منصة تجمع القوانين والقرارات القضائية",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode,
-}) {
+export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl">
       <head>
