@@ -3,16 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
 
     <title>عدالة AI</title>
 
-    <!-- خطوط عربية مميزة -->
+    <!-- خطوط عربية -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Amiri&family=Cairo:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Amiri&family=Cairo:wght@400;700&display=swap"
       rel="stylesheet"
     />
 
@@ -22,29 +18,8 @@
       rel="stylesheet"
     />
 
-
-    <!-- إعداد Tailwind بخطوط عربية مدمجة -->
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              cairo: ["Cairo", "sans-serif"],
-              amiri: ["Amiri", "serif"],
-            },
-            keyframes: {
-              fadeInDown: {
-                "0%": { opacity: "0", transform: "translateY(-30px)" },
-                "100%": { opacity: "1", transform: "translateY(0)" },
-              },
-            },
-            animation: {
-              fadeInDown: "fadeInDown 1.5s ease-out forwards",
-            },
-          },
-        },
-      };
-    </script>
+    <!-- استدعاء CSS محلي يحتوي على Tailwind -->
+    <link rel="stylesheet" href="/styles/globals.css" />
   </head>
   <body
     class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300 font-cairo"
@@ -53,4 +28,3 @@
     <div id="root"></div>
   </body>
 </html>
-
