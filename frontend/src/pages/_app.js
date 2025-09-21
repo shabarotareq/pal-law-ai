@@ -1,5 +1,5 @@
 // pages/_app.js
-import "../styles/globals.css";
+import "../app/globals.css";
 import { useState, useEffect } from "react";
 import { LegalKnowledgeProvider } from "../contexts/LegalKnowledgeContext";
 import { AuthProvider } from "../contexts/AuthContext";
@@ -62,3 +62,4 @@ function MyApp({ Component, pageProps }) {
 }
 
 export default MyApp;
+
