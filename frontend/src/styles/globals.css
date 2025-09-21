@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== Animations ===== */
 @keyframes gradient-move {
   0% {
     background-position: 0% 50%;
@@ -19,7 +20,7 @@
   animation: gradient-move 8s ease infinite;
 }
 
-/* Overlay الدستور */
+/* ===== Overlay الدستور ===== */
 .overlay {
   position: fixed;
   top: 0;
@@ -37,7 +38,7 @@
   background: #fff;
   width: 80%;
   max-width: 800px;
-  height: 70vh; /* ارتفاع نسبي للشاشة */
+  height: 70vh;
   min-height: 300px;
   position: relative;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -61,27 +62,64 @@
   cursor: pointer;
 }
 
+/* ===== Hero Section ===== */
 .herosection {
   background: #f0f0f0;
   padding: 2rem;
   text-align: center;
-  width: "15px";
-  height: "15px";
+  width: 100%;
+  height: auto;
 }
 
-/* FlipBook container ليكون responsive */
+/* ===== FlipBook container responsive ===== */
 .flipbook-container {
-  width: "15px";
-  height: "15px";
+  width: 100%;
+  height: 500px;
 }
 
 .flipbook {
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: visible;
   border: 1px solid #ccc;
   border-radius: 0.5rem;
   background: #fafafa;
   padding: 1rem;
   box-sizing: border-box;
+}
+
+/* ===== FlipBook Arabic page ===== */
+.flipbook-rtl .react-pageflip__page {
+  transform-origin: left center !important;
+}
+
+.flipbook-rtl .react-pageflip__cover {
+  transform-origin: left center !important;
+}
+
+/* ===== FlipBook English page ===== */
+.flipbook-ltr .react-pageflip__page {
+  transform-origin: right center !important;
+}
+
+.flipbook-ltr .react-pageflip__cover {
+  transform-origin: right center !important;
+}
+
+/* ===== Arabic text inside page ===== */
+.flipbook-rtl-content {
+  direction: rtl;
+  text-align: right;
+}
+
+.flipbook-rtl-content h1,
+.flipbook-rtl-content h2,
+.flipbook-rtl-content h3,
+.flipbook-rtl-content h4,
+.flipbook-rtl-content h5,
+.flipbook-rtl-content h6,
+.flipbook-rtl-content p {
+  text-align: right;
+  margin-right: 0;
+  margin-left: auto;
 }
