@@ -2,31 +2,37 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>المادة 1 - تعريف الجريمة | القاضي الذكي</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- استيراد Tailwind المحلي -->
+    <link rel="stylesheet" href="/globals.css" />
+
+    <style>
+      /* تحسين بعض التفاصيل الصغيرة */
+      body { font-family: "Cairo", sans-serif; }
+      a:focus { outline: 2px solid #2563eb; outline-offset: 2px; }
+    </style>
   </head>
-  <body class="bg-gray-50">
-    <!-- header -->
-    <header class="bg-blue-700 text-white p-4 shadow">
-      <div class="container mx-auto flex justify-between items-center">
+  <body class="bg-gray-50 text-gray-800">
+
+    <!-- Header -->
+    <header class="bg-blue-700 text-white shadow">
+      <div class="container mx-auto flex justify-between items-center p-4">
         <h1 class="text-xl font-bold">المادة 1: تعريف الجريمة</h1>
-        <nav>
+        <nav class="flex gap-2">
           <a href="/index.html" class="hover:underline px-2">الرئيسية</a>
-          <a href="/criminal/index.html" class="hover:underline px-2"
-            >القانون الجنائي</a
-          >
-          <a href="/criminal/part-1/index.html" class="hover:underline px-2"
-            >الجزء 1</a
-          >
+          <a href="/criminal/index.html" class="hover:underline px-2">القانون الجنائي</a>
+          <a href="/criminal/part-1/index.html" class="hover:underline px-2">الجزء 1</a>
         </nav>
       </div>
     </header>
 
+    <!-- Main content -->
     <main class="container mx-auto px-4 py-8">
       <article class="bg-white rounded-lg shadow p-6">
         <h2 class="text-lg font-semibold mb-4">نص المادة</h2>
-        <p class="text-gray-700 leading-relaxed mb-4">
+        <p class="leading-relaxed mb-4">
           (هنا ضع نص المادة 1 كاملة أو ملخصها). يمكنك إضافة
           <strong>مراجع</strong> أو <em>رابط إلى أحكام مماثلة</em>.
         </p>
@@ -37,20 +43,27 @@
         </div>
       </article>
 
-      <div class="mt-6 flex gap-4">
+      <!-- Navigation links -->
+      <div class="mt-6 flex flex-col md:flex-row gap-4">
         <a
           href="/criminal/part-1/index.html"
           class="text-blue-600 hover:underline"
-          >‹ رجوع إلى قائمة المواد</a
         >
-        <a href="/criminal/index.html" class="text-gray-500 hover:underline"
-          >‹ رجوع إلى أقسام القانون الجنائي</a
+          ‹ رجوع إلى قائمة المواد
+        </a>
+        <a
+          href="/criminal/index.html"
+          class="text-gray-500 hover:underline"
         >
+          ‹ رجوع إلى أقسام القانون الجنائي
+        </a>
       </div>
     </main>
 
+    <!-- Footer -->
     <footer class="bg-gray-800 text-white text-center p-4 mt-12">
       &copy; 2024 القاضي الذكي
     </footer>
+
   </body>
 </html>
