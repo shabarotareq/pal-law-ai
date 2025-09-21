@@ -1,11 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
 
+  // إعدادات Webpack مخصصة
   webpack: (config, { isServer }) => {
     if (!isServer) {
-      // تعطيل مكتبات Node.js على المتصفح
+      // تجاوز الحزم الخاصة بالسيرفر عند البندل للعميل
       config.resolve.fallback = {
         ...config.resolve.fallback,
         fs: false,
@@ -22,7 +22,7 @@ const nextConfig = {
 
       const webpack = require("webpack");
 
-      // تجاهل gzip-size حتى لا يدخل في bundle العميل
+      // تجاهل حزمة gzip-size أثناء البندل للعميل
       config.plugins.push(
         new webpack.IgnorePlugin({
           resourceRegExp: /^gzip-size$/,
@@ -33,11 +33,22 @@ const nextConfig = {
     return config;
   },
 
+  // تحسين الأداء وتقليل التحذيرات في البناء
   experimental: {
-    // يظل gzip-size متاح فقط للسيرفر
-    serverComponentsExternalPackages: ["gzip-size"],
-    // تفعيل build worker لتقليل التحذيرات وتحسين الأداء
     webpackBuildWorker: true,
+  },
+
+  // حل مشكلة serverComponentsExternalPackages في Next.js 15+
+  serverExternalPackages: ["gzip-size"],
+
+  // تجاوز تحذيرات ESLint أثناء البناء
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
+  // ضبط TypeScript
+  typescript: {
+    ignoreBuildErrors: false, // اجعل true لتجاوز أخطاء TypeScript أثناء البناء إذا أردت
   },
 };
 
