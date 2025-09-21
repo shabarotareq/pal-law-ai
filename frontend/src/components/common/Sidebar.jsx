@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
-import VirtualCourt from "../court/Virtualcourt"; // ✅ استدعاء المكون
+import VirtualCourt from "../court/VirtualCourt"; // ✅ استدعاء المكون
 
 const Sidebar = ({ lang = "ar", isOpen = true, onClose, currentUser }) => {
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
@@ -170,3 +170,4 @@ const Sidebar = ({ lang = "ar", isOpen = true, onClose, currentUser }) => {
 };
 
 export default Sidebar;
+
