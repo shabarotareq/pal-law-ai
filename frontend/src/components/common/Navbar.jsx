@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "../../assets/logo192.jpg";
-import Constitution from "../constitution/Constitution";
+import Constitution from "../constitution/Constitution"; // تأكد من استيراد الملف الصحيح
 
 const Navbar = ({ lang, toggleLanguage }) => {
   const [me, setMe] = useState(null);
@@ -227,28 +227,22 @@ const Navbar = ({ lang, toggleLanguage }) => {
         </header>
       </div>
 
-      {/* Overlay الدستور */}
+      {/* Overlay الدستور مع الخلفية المعتمة للمكونات أسفله */}
       {showConstitution && (
-        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-[9999]">
-          <div className="bg-white rounded-lg p-4 relative w-[90%] h-[90%] overflow-hidden shadow-xl">
-            <button
-              className="absolute top-2 right-2 text-red-600 font-bold text-xl"
-              onClick={() => setShowConstitution(false)}
-            >
-              ✕
-            </button>
-            <Constitution
-              width={800}
-              height={600}
-              lang={lang}
-              toggleLanguage={toggleLanguage}
-            />
-          </div>
-        </div>
+        <>
+          {/* خلفية معتمة للمكونات أسفل الكتاب */}
+          <div className="fixed inset-0 bg-black bg-opacity-30 z-[9998]" />
+
+          {/* الكتاب */}
+          <Constitution
+            lang={lang}
+            toggleLanguage={toggleLanguage}
+            onClose={() => setShowConstitution(false)} // زر × و ESC يغلق الكتاب
+          />
+        </>
       )}
     </>
   );
 };
 
 export default Navbar;
-
