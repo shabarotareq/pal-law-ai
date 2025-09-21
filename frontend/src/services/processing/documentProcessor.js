@@ -1,10 +1,10 @@
 import mammoth from "mammoth";
-import * as pdfjsLib from "pdfjs-dist";
+import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf"; // نسخة ثابتة للعمل على Node
 
-// تهيئة pdfjs
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+// تهيئة pdfjs لاستخدام worker محلي
+pdfjsLib.GlobalWorkerOptions.workerSrc = `/pdf.worker.min.js`; // ضع pdf.worker.min.js في public/
 
-// معالجة不同类型的 من الوثائق
+// معالجة الملفات حسب النوع
 export const processDocument = async (file, type) => {
   try {
     switch (type) {
@@ -25,61 +25,52 @@ export const processDocument = async (file, type) => {
 
 // استخراج النص من PDF
 const extractTextFromPDF = async (file) => {
-  try {
-    const arrayBuffer = await file.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+  if (!file?.arrayBuffer) throw new Error("ملف PDF غير صالح");
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
 
-    let fullText = "";
-    for (let i = 1; i <= pdf.numPages; i++) {
-      const page = await pdf.getPage(i);
-      const textContent = await page.getTextContent();
-      const pageText = textContent.items.map((item) => item.str).join(" ");
-      fullText += pageText + "\n";
-    }
-
-    return {
-      text: fullText,
-      metadata: {
-        pageCount: pdf.numPages,
-        processedAt: new Date().toISOString(),
-      },
-    };
-  } catch (error) {
-    throw new Error(`فشل في استخراج النص من PDF: ${error.message}`);
+  let fullText = "";
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const textContent = await page.getTextContent();
+    const pageText = textContent.items.map((item) => item.str).join(" ");
+    fullText += pageText + "\n";
   }
+
+  return {
+    text: fullText,
+    metadata: {
+      pageCount: pdf.numPages,
+      processedAt: new Date().toISOString(),
+    },
+  };
 };
 
 // استخراج النص من DOCX
 const extractTextFromDOCX = async (file) => {
-  try {
-    const arrayBuffer = await file.arrayBuffer();
-    const result = await mammoth.extractRawText({ arrayBuffer });
+  if (!file?.arrayBuffer) throw new Error("ملف DOCX غير صالح");
+  const arrayBuffer = await file.arrayBuffer();
+  const result = await mammoth.extractRawText({ arrayBuffer });
 
-    return {
-      text: result.value,
-      metadata: {
-        processedAt: new Date().toISOString(),
-        warnings: result.messages,
-      },
-    };
-  } catch (error) {
-    throw new Error(`فشل في استخراج النص من DOCX: ${error.message}`);
-  }
+  return {
+    text: result.value,
+    metadata: {
+      processedAt: new Date().toISOString(),
+      warnings: result.messages,
+    },
+  };
 };
 
 // استخراج النص من TXT
 const extractTextFromTXT = async (file) => {
-  try {
-    const text = await file.text();
-    return {
-      text,
-      metadata: {
-        processedAt: new Date().toISOString(),
-      },
-    };
-  } catch (error) {
-    throw new Error(`فشل في استخراج النص من TXT: ${error.message}`);
-  }
+  if (!file?.text) throw new Error("ملف TXT غير صالح");
+  const text = await file.text();
+  return {
+    text,
+    metadata: {
+      processedAt: new Date().toISOString(),
+    },
+  };
 };
 
 // تقسيم النص إلى أجزاء للبحث
@@ -101,10 +92,13 @@ export const chunkTextForSearch = (text, chunkSize = 1000) => {
 
 // البحث في النص المحلي
 export const searchInDocument = (text, query) => {
-  const regex = new RegExp(query, "gi");
+  if (!query) return [];
+  // هروب الرموز الخاصة في query
+  const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp(escapedQuery, "gi");
+
   const matches = [];
   let match;
-
   while ((match = regex.exec(text)) !== null) {
     const start = Math.max(0, match.index - 100);
     const end = Math.min(text.length, match.index + match[0].length + 100);
