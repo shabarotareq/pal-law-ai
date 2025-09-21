@@ -2,15 +2,17 @@
 <html lang="ar" dir="rtl">
   <head>
     <meta charset="UTF-8" />
-    <title>{{PAGE_TITLE}} | عدالة AI</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>عدالة AI</title>
+    <!-- في الإنتاج استخدم Tailwind مُثبت عبر npm و postcss بدل CDN -->
+    <link rel="stylesheet" href="/styles/globals.css" />
   </head>
-  <body class="bg-gray-50 flex flex-col min-h-screen">
+  <body class="bg-gray-50 flex flex-col min-h-screen font-cairo">
     <!-- 🔹 رأس الصفحة -->
     <header class="bg-blue-700 text-white p-4 shadow">
       <div class="container mx-auto flex justify-between items-center">
-        <h1 class="text-xl font-bold">{{PAGE_HEADER}}</h1>
-        <nav>
+        <h1 class="text-xl font-bold" id="page-header">عدالة AI</h1>
+        <nav class="flex flex-wrap gap-2">
           <a href="index.html" class="hover:underline px-2">الرئيسية</a>
           <a href="criminal.html" class="hover:underline px-2"
             >القانون الجنائي</a
@@ -28,13 +30,29 @@
 
     <!-- 🔹 محتوى الصفحة -->
     <main class="container mx-auto px-4 py-8 flex-1">
-      <h2 class="text-2xl font-bold mb-6">{{SECTION_TITLE}}</h2>
-      <div class="space-y-3">{{CONTENT}}</div>
+      <h2 class="text-2xl font-bold mb-6" id="section-title">عنوان القسم</h2>
+      <div class="space-y-3" id="content">
+        <p>محتوى الصفحة سيظهر هنا.</p>
+      </div>
     </main>
 
     <!-- 🔹 ذيل الصفحة -->
     <footer class="bg-gray-800 text-white text-center p-4">
       &copy; 2025 عدالة AI - جميع الحقوق محفوظة
     </footer>
+
+    <!-- في حال أردت تحديث النصوص ديناميكيًا -->
+    <script>
+      const pageTitle = "القانون المدني";
+      const pageHeader = "عدالة AI";
+      const sectionTitle = "مقدمة في القانون المدني";
+      const contentHTML =
+        "<p>هذا مثال لمحتوى القسم يمكن تغييره ديناميكيًا.</p>";
+
+      document.title = pageTitle + " | عدالة AI";
+      document.getElementById("page-header").innerText = pageHeader;
+      document.getElementById("section-title").innerText = sectionTitle;
+      document.getElementById("content").innerHTML = contentHTML;
+    </script>
   </body>
 </html>
