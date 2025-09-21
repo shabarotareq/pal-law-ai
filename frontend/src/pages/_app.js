@@ -1,11 +1,11 @@
 // pages/_app.js
-import "/globals.css"; // ✅ الاستدعاء الصحيح للـ CSS
+import "../app/globals.css"; // ✅ استدعاء CSS الصحيح
 
 import { useState, useEffect } from "react";
 import { LegalKnowledgeProvider } from "../contexts/LegalKnowledgeContext";
 import { AuthProvider } from "../contexts/AuthContext";
 import Navbar from "../components/common/Navbar";
-import Herosection from "../components/landing/HeroSection";
+import HeroSection from "../components/landing/HeroSection"; // تصحيح الاسم
 import Sidebar from "../components/common/Sidebar";
 import Footer from "../components/common/Footer";
 import JudicialMarquee from "../components/common/JudicialMarquee";
@@ -41,7 +41,7 @@ function MyApp({ Component, pageProps }) {
 
               {/* Main Content */}
               <main className="flex-grow p-2 md:p-3 lg:p-4">
-                <Herosection lang={lang} toggleLanguage={toggleLanguage} />
+                <HeroSection lang={lang} toggleLanguage={toggleLanguage} />
                 {/* عرض الصفحة الحالية */}
                 <Component
                   {...pageProps}
@@ -61,4 +61,3 @@ function MyApp({ Component, pageProps }) {
 }
 
 export default MyApp;
-
