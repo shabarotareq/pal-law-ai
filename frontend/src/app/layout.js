@@ -2,11 +2,6 @@
 
 import "./globals.css";
 
-export const metadata = {
-  title: "عدالة AI | Palestine Law AI",
-  description: "منصة تجمع القوانين والقرارات القضائية",
-};
-
 export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl">
