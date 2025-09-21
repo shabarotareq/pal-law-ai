@@ -1,10 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/**/*.{js,jsx,ts,tsx}", // ✅ تغطية شاملة لجميع الملفات
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/**/*.{js,ts,jsx,tsx,mdx}", // تغطية شاملة لجميع الملفات
   ],
   theme: {
     extend: {
@@ -57,39 +57,18 @@ module.exports = {
       // الحركات والتحريك
       keyframes: {
         fadeInDown: {
-          "0%": {
-            opacity: "0",
-            transform: "translateY(-30px)",
-          },
-          "100%": {
-            opacity: "1",
-            transform: "translateY(0)",
-          },
+          "0%": { opacity: "0", transform: "translateY(-30px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
         },
         flip: {
-          "0%": {
-            transform: "rotateY(0deg)",
-          },
-          "50%": {
-            transform: "rotateY(90deg)",
-          },
-          "100%": {
-            transform: "rotateY(0deg)",
-          },
+          "0%": { transform: "rotateY(0deg)" },
+          "50%": { transform: "rotateY(90deg)" },
+          "100%": { transform: "rotateY(0deg)" },
         },
         pageTurn: {
-          "0%": {
-            transform: "rotateY(0deg)",
-            "z-index": "1",
-          },
-          "50%": {
-            transform: "rotateY(-90deg)",
-            "z-index": "0",
-          },
-          "100%": {
-            transform: "rotateY(-180deg)",
-            "z-index": "0",
-          },
+          "0%": { transform: "rotateY(0deg)", zIndex: "1" },
+          "50%": { transform: "rotateY(-90deg)", zIndex: "0" },
+          "100%": { transform: "rotateY(-180deg)", zIndex: "0" },
         },
       },
 
