@@ -1,5 +1,5 @@
 // pages/_app.js
-import "../app/globals.css"; // ✅ استدعاء CSS الصحيح
+import "../styles/globals.css"; // ✅ استدعاء CSS الصحيح
 
 import { useState, useEffect } from "react";
 import { LegalKnowledgeProvider } from "../contexts/LegalKnowledgeContext";
@@ -61,3 +61,4 @@ function MyApp({ Component, pageProps }) {
 }
 
 export default MyApp;
+
