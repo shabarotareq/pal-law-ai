@@ -1,7 +1,7 @@
 "use client"; // Layout كـ Client Component للسماح باستخدام useEffect
 
 import { useState, useEffect } from "react";
-import "./globals.css";
+import "../styles/globals.css";
 
 import Navbar from "../components/common/Navbar";
 import JudicialMarquee from "../components/common/JudicialMarquee";
@@ -50,3 +50,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
