@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { LegalKnowledgeProvider } from "../contexts/LegalKnowledgeContext";
 import { AuthProvider } from "../contexts/AuthContext";
 import Navbar from "../components/common/Navbar";
-import HeroSection from "../components/landing/HeroSection"; // تصحيح الاسم
+import HeroSection from "../components/landing/HeroSection";
 import Sidebar from "../components/common/Sidebar";
 import Footer from "../components/common/Footer";
 import JudicialMarquee from "../components/common/JudicialMarquee";
@@ -61,4 +61,3 @@ function MyApp({ Component, pageProps }) {
 }
 
 export default MyApp;
-
