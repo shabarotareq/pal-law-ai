@@ -5,7 +5,7 @@ import Analytics from "./Analytics";
 import UserManagement from "./UserManagement";
 import Settings from "./Settings";
 import Profile from "./Profile";
-import VirtualCourt from "../court/VirtualCourt1";
+import VirtualCourt from "../court/VirtualCourt";
 import LegalChatBot from "../legal_knowledge/LegalChatBot";
 import LegalSearch from "../legal_knowledge/LegalSearch";
 import LawBrowser from "../legal_knowledge/LawBrowser";
@@ -125,3 +125,4 @@ const getTabDescription = (tab) => {
 };
 
 export default Dashboard;
+
